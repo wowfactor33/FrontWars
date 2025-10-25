@@ -1,3 +1,16 @@
+📦 **FrontWars v25.3 Changelog**
+
+🎨 **New Patterns & Logo Style**
+
+- New pattern combinations for unique territory designs
+- Updated logo design with modern styling
+- Enhanced visual identity and branding
+
+⚖️ **Fast Mode Balancing**
+
+- Improved balance for Fast Mode economy gameplay
+
+
 📦 **FrontWars v25.2 Changelog**
 
 🚀 **New Economy Mode**

@@ -1,7 +1,6 @@
 .l-header {
   display: flex;
   justify-content: center;
-  padding: 24px 0;
 }
 
 .l-header__content {
@@ -16,7 +15,6 @@
 
 .l-header__logo {
   max-width: 505px;
-  fill: url(#logo-gradient);
   filter: drop-shadow(1px 1px 0px rgb(255, 255, 255))
     drop-shadow(-1px -1px 0px rgb(255, 255, 255))
     drop-shadow(1px -1px 0px rgb(255, 255, 255))
@@ -36,15 +34,6 @@
     drop-shadow(2px 2px 8px rgba(0, 0, 0, 1.0)) !important;
 }
 
-/* Halloween logo gradient colors - warmer, more pumpkin-like */
-:root.halloween #logo-gradient stop:nth-child(1) {
-  stop-color: #d2691e !important; /* Chocolate orange */
-}
-
-:root.halloween #logo-gradient stop:nth-child(2) {
-  stop-color: #cd853f !important; /* Peru brown-orange */
-}
-
 .l-header__highlightText {
   color: #2563eb;
   font-weight: 700;
@@ -61,184 +50,4 @@
     drop-shadow(-1px -1px 0px #4b0082)
     drop-shadow(1px -1px 0px #4b0082)
     drop-shadow(-1px 1px 0px #4b0082) !important;
-}
-
-/* Show Halloween pumpkin on logo */
-:root.halloween .halloween-pumpkin-svg {
-  display: block !important;
-}
-
-:root.halloween .halloween-pumpkin-container {
-  display: block !important;
-  animation: pumpkinFloat 4s ease-in-out infinite, pumpkinSway 6s ease-in-out infinite, pumpkinGlow 3s ease-in-out infinite alternate, pumpkinBreathe 5s ease-in-out infinite;
-  filter: drop-shadow(2px 4px 8px rgba(0, 0, 0, 0.4)) drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
-/* Pumpkin floating animation */
-@keyframes pumpkinFloat {
-  0%, 100% {
-    transform: translateX(-50%) rotate(-27deg) translateY(0px);
-  }
-  50% {
-    transform: translateX(-50%) rotate(-27deg) translateY(-8px);
-  }
-}
-
-/* Pumpkin gentle swaying animation */
-@keyframes pumpkinSway {
-  0%, 100% {
-    transform: translateX(-50%) rotate(-27deg) rotateY(0deg);
-  }
-  25% {
-    transform: translateX(-50%) rotate(-27deg) rotateY(-5deg);
-  }
-  75% {
-    transform: translateX(-50%) rotate(-27deg) rotateY(5deg);
-  }
-}
-
-/* Pumpkin glow effect */
-@keyframes pumpkinGlow {
-  0% {
-    filter: drop-shadow(0 0 5px rgba(255, 165, 0, 0.3)) drop-shadow(0 0 10px rgba(255, 140, 0, 0.2));
-  }
-  100% {
-    filter: drop-shadow(0 0 15px rgba(255, 165, 0, 0.6)) drop-shadow(0 0 25px rgba(255, 140, 0, 0.4)) drop-shadow(0 0 35px rgba(255, 69, 0, 0.2));
-  }
-}
-
-/* Enhanced pumpkin hover effects */
-:root.halloween .halloween-pumpkin-container:hover {
-  animation: pumpkinFloat 2s ease-in-out infinite, pumpkinSway 3s ease-in-out infinite, pumpkinGlow 1.5s ease-in-out infinite alternate, pumpkinWobble 0.8s ease-in-out, pumpkinBreathe 3s ease-in-out infinite;
-  cursor: pointer;
-  filter: drop-shadow(3px 6px 12px rgba(0, 0, 0, 0.5)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.3));
-}
-
-@keyframes pumpkinWobble {
-  0%, 100% {
-    transform: translateX(-50%) rotate(-27deg) scale(1);
-  }
-  25% {
-    transform: translateX(-50%) rotate(-32deg) scale(1.05);
-  }
-  50% {
-    transform: translateX(-50%) rotate(-22deg) scale(1.1);
-  }
-  75% {
-    transform: translateX(-50%) rotate(-32deg) scale(1.05);
-  }
-}
-
-/* Pumpkin sparkle effect */
-:root.halloween .halloween-pumpkin-container::before {
-  content: '';
-  position: absolute;
-  top: 20%;
-  left: 30%;
-  width: 4px;
-  height: 4px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 1) 0%, rgba(255, 215, 0, 0) 70%);
-  border-radius: 50%;
-  animation: sparkle 2s ease-in-out infinite;
-  pointer-events: none;
-}
-
-:root.halloween .halloween-pumpkin-container::after {
-  content: '';
-  position: absolute;
-  top: 60%;
-  right: 25%;
-  width: 3px;
-  height: 3px;
-  background: radial-gradient(circle, rgba(255, 215, 0, 0.8) 0%, rgba(255, 215, 0, 0) 70%);
-  border-radius: 50%;
-  animation: sparkle 2.5s ease-in-out infinite 0.5s;
-  pointer-events: none;
-}
-
-@keyframes sparkle {
-  0%, 80%, 100% {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-  10% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  20% {
-    opacity: 0;
-    transform: scale(0.5);
-  }
-}
-
-/* Pumpkin breathing animation */
-@keyframes pumpkinBreathe {
-  0%, 100% {
-    transform: translateX(-50%) rotate(-27deg) scale(1);
-  }
-  50% {
-    transform: translateX(-50%) rotate(-27deg) scale(1.05);
-  }
-}
-
-
-/* Responsive pumpkin animations for mobile devices */
-@media (max-width: 768px) {
-  :root.halloween .halloween-pumpkin-container {
-    width: 80px;
-    height: 80px;
-    top: -35px;
-  }
-
-  /* Reduce animation intensity on mobile for better performance */
-  :root.halloween .halloween-pumpkin-container {
-    animation: pumpkinFloat 6s ease-in-out infinite, pumpkinSway 8s ease-in-out infinite, pumpkinGlow 4s ease-in-out infinite alternate, pumpkinBreathe 7s ease-in-out infinite;
-  }
-
-  /* Smaller sparkle effects on mobile */
-  :root.halloween .halloween-pumpkin-container::before,
-  :root.halloween .halloween-pumpkin-container::after {
-    width: 2px;
-    height: 2px;
-  }
-
-  /* Reduce hover effects on touch devices */
-  :root.halloween .halloween-pumpkin-container:hover {
-    animation: pumpkinFloat 4s ease-in-out infinite, pumpkinSway 6s ease-in-out infinite, pumpkinGlow 2.5s ease-in-out infinite alternate, pumpkinBreathe 4s ease-in-out infinite;
-  }
-}
-
-@media (max-width: 480px) {
-  :root.halloween .halloween-pumpkin-container {
-    width: 60px;
-    height: 60px;
-    top: -25px;
-  }
-
-  /* Minimal animations on very small screens */
-  :root.halloween .halloween-pumpkin-container {
-    animation: pumpkinFloat 8s ease-in-out infinite, pumpkinGlow 5s ease-in-out infinite alternate, pumpkinBreathe 9s ease-in-out infinite;
-  }
-
-  /* Disable complex hover effects on small touch screens */
-  :root.halloween .halloween-pumpkin-container:hover {
-    animation: pumpkinFloat 6s ease-in-out infinite, pumpkinGlow 3s ease-in-out infinite alternate, pumpkinBreathe 5s ease-in-out infinite;
-  }
-}
-
-
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-  :root.halloween .halloween-pumpkin-container {
-    animation: pumpkinGlow 6s ease-in-out infinite alternate, pumpkinBreathe 8s ease-in-out infinite;
-  }
-
-  :root.halloween .halloween-pumpkin-container:hover {
-    animation: pumpkinGlow 4s ease-in-out infinite alternate, pumpkinBreathe 6s ease-in-out infinite;
-  }
-
-  :root.halloween .halloween-pumpkin-container::before,
-  :root.halloween .halloween-pumpkin-container::after {
-    animation: none;
-  }
 }

@@ -47,7 +47,6 @@ export class PublicLobby extends LitElement {
         // the time to appear irregular.
         if (!this.lobbyIDToStart.has(l.gameID)) {
           const msUntilStart = l.msUntilStart ?? 0;
-          console.log(msUntilStart);
           this.lobbyIDToStart.set(l.gameID, msUntilStart + Date.now());
         }
 
