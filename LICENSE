@@ -2,8 +2,12 @@
 
 ## Overview
 
-As of commit 25d5cc370207fd39e0c3bcaa69873b8fc6c60e68, the src/client directory of the OpenFront.io project has been relicensed from the MIT License to the GNU General Public License (GPL) version 3.0. The rest of the project remains under the MIT License unless otherwise specified. Assets in the `/non-commercial/` directory are licensed under CC BY-NC 4.0 with a commercial exemption for OpenFront LLC. Below are the details of all licenses and their applicability.
-
+As of commit 1d00f1031a3ac65f3c44b187e9b15c6d2b7d063a (October 2025),
+the `/client` directory of the FrontWars project has been relicensed from
+the MIT License to the **GNU Affero General Public License (AGPL) version 3.0**.
+All other parts of the project remain under the **MIT License** unless otherwise
+specified. Assets in the `/resources/non-commercial/` directory (if any)
+are licensed under **Creative Commons BY-NC 4.0**.
 ## MIT License
 
 **Applies to:** All parts of the OpenFront.io project except the src/client directory as of commit 25d5cc370207fd39e0c3bcaa69873b8fc6c60e68 (March 25 2025) and the `resources/non-commercial/` directory.
