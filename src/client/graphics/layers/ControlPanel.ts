@@ -4,7 +4,7 @@ import { translateText } from "../../../client/Utils";
 import { EventBus } from "../../../core/EventBus";
 import { Gold } from "../../../core/game/Game";
 import { GameView } from "../../../core/game/GameView";
-import { ClientID } from "../../../core/Schemas";
+import { ClientID } from "../../../core/schemas";
 import { AttackRatioEvent } from "../../InputHandler";
 import { renderNumber, renderTroops } from "../../Utils";
 import { UIState } from "../UIState";

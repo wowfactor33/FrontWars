@@ -21,7 +21,7 @@ import {
   GameConfig,
   GameInfo,
   TeamCountConfig,
-} from "../core/Schemas";
+} from "../core/schemas";
 import { generateID } from "../core/Util";
 import "./components/baseComponents/Modal";
 import "./components/Difficulties";

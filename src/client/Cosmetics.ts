@@ -1,52 +1,6 @@
 import { UserMeResponse } from "../core/ApiSchemas";
-import { ColorPalette, Cosmetics, Pattern } from "../core/CosmeticSchemas";
-import { getApiBase, getAuthHeader } from "./jwt";
-import { getPersistentID } from "./Main";
+import { Cosmetics, Pattern } from "../core/schemas/cosmetic";
 import cosmetics from "../../resources/cosmetics/cosmetics.json";
-
-export async function handlePurchase(
-  pattern: Pattern,
-  colorPalette: ColorPalette | null,
-) {
-  if (pattern.product === null) {
-    alert("This pattern is not available for purchase.");
-    return;
-  }
-
-  const response = await fetch(
-    `${getApiBase()}/stripe/create-checkout-session`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: getAuthHeader(),
-        "X-Persistent-Id": getPersistentID(),
-      },
-      body: JSON.stringify({
-        priceId: pattern.product.priceId,
-        hostname: window.location.origin,
-        colorPaletteName: colorPalette?.name,
-      }),
-    },
-  );
-
-  if (!response.ok) {
-    console.error(
-      `Error purchasing pattern:${response.status} ${response.statusText}`,
-    );
-    if (response.status === 401) {
-      alert("You are not logged in. Please log in to purchase a pattern.");
-    } else {
-      alert("Something went wrong. Please try again later.");
-    }
-    return;
-  }
-
-  const { url } = await response.json();
-
-  // Redirect to Stripe checkout
-  window.location.href = url;
-}
 
 export async function fetchCosmetics(): Promise<Cosmetics | null> {
   return cosmetics as any;

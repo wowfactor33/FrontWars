@@ -1,16 +1,12 @@
 import { LitElement, TemplateResult, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
-import { isInIframe, translateText } from "../../../client/Utils";
-import { ColorPalette, Pattern } from "../../../core/CosmeticSchemas";
+import { translateText } from "../../../client/Utils";
+import { ColorPalette, Pattern } from "../../../core/schemas/cosmetic";
 import { EventBus } from "../../../core/EventBus";
 import { GameUpdateType } from "../../../core/game/GameUpdates";
 import { GameView } from "../../../core/game/GameView";
 import "../../components/PatternButton";
-import {
-  fetchCosmetics,
-  handlePurchase,
-  patternRelationship,
-} from "../../Cosmetics";
+import { fetchCosmetics, patternRelationship } from "../../Cosmetics";
 import { CrazySDK } from "../../CrazyGamesSDK";
 import { getUserMe } from "../../jwt";
 import { SendWinnerEvent } from "../../Transport";
@@ -171,8 +167,7 @@ export class WinModal extends LitElement implements Layer {
               .colorPalette=${colorPalette}
               .requiresPurchase=${true}
               .onSelect=${(p: Pattern | null) => {}}
-              .onPurchase=${(p: Pattern, colorPalette: ColorPalette | null) =>
-                handlePurchase(p, colorPalette)}
+              .onPurchase=${(p: Pattern, colorPalette: ColorPalette | null) => {}}
             ></pattern-button>
           `,
         )}

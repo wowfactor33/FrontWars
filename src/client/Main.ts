@@ -1,10 +1,9 @@
 import { UserMeResponse } from "../core/ApiSchemas";
 import { EventBus } from "../core/EventBus";
-import { GameRecord, GameStartInfo, ID } from "../core/Schemas";
+import { GameRecord, GameStartInfo, ID } from "../core/schemas";
 import { ServerConfig } from "../core/configuration/Config";
 import { getServerConfigFromClient } from "../core/configuration/ConfigLoader";
 import { UserSettings } from "../core/game/UserSettings";
-import "./AccountModal";
 import { joinLobby } from "./ClientGameRunner";
 import { fetchCosmetics } from "./Cosmetics";
 import { CrazySDK } from "./CrazyGamesSDK";
@@ -449,7 +448,7 @@ class Client {
         return;
       }
 
-      this.userSettings.setSelectedPatternName(patternName);
+      this.userSettings.setSelectedPattern(patternName);
       const token = params.get("login-token");
 
       if (token) {
@@ -457,7 +456,7 @@ class Client {
         window.addEventListener("beforeunload", () => {
           // The page reloads after token login, so we need to save the pattern name
           // in case it is unset during reload.
-          this.userSettings.setSelectedPatternName(patternName);
+          this.userSettings.setSelectedPattern(patternName);
         });
         this.tokenLoginModal.open(token);
       } else {
@@ -545,7 +544,7 @@ class Client {
     }
     const config = await getServerConfigFromClient();
 
-    const pattern = this.userSettings.getSelectedPatternName(
+    const pattern = this.userSettings.getSelectedPattern(
       await fetchCosmetics(),
     );
 

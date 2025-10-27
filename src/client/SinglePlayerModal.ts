@@ -16,7 +16,7 @@ import {
   mapCategories,
 } from "../core/game/Game";
 import { UserSettings } from "../core/game/UserSettings";
-import { TeamCountConfig } from "../core/Schemas";
+import { TeamCountConfig } from "../core/schemas";
 import { generateID } from "../core/Util";
 import "./components/baseComponents/Button";
 import "./components/baseComponents/Modal";
@@ -484,10 +484,8 @@ export class SinglePlayerModal extends LitElement {
       console.warn("Flag input element not found");
     }
     const cosmetics = await fetchCosmetics();
-    let selectedPattern = this.userSettings.getSelectedPatternName(cosmetics);
-    selectedPattern ??= cosmetics
-      ? (this.userSettings.getDevOnlyPattern() ?? null)
-      : null;
+    let selectedPattern = this.userSettings.getSelectedPattern(cosmetics);
+    selectedPattern ??= null;
 
     const selectedColor = this.userSettings.getSelectedColor();
 

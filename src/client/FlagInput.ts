@@ -1,7 +1,7 @@
 import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { renderPlayerFlag } from "../core/CustomFlag";
-import { FlagSchema } from "../core/Schemas";
+import { FlagSchema } from "../core/schemas";
 import { translateText } from "./Utils";
 
 const flagKey: string = "flag";

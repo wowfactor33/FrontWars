@@ -2,13 +2,9 @@ import { Colord } from "colord";
 import { base64url } from "jose";
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import {
-  ColorPalette,
-  DefaultPattern,
-  Pattern,
-} from "../../core/CosmeticSchemas";
+import { ColorPalette, DefaultPattern, Pattern } from "../../core/schemas/cosmetic";
 import { PatternDecoder } from "../../core/PatternDecoder";
-import { PlayerPattern } from "../../core/Schemas";
+import { PlayerPattern } from "../../core/schemas";
 import { translateText } from "../Utils";
 
 export const BUTTON_WIDTH = 150;
@@ -60,9 +56,6 @@ export class PatternButton extends LitElement {
 
   private handlePurchase(e: Event) {
     e.stopPropagation();
-    if (this.pattern?.product) {
-      this.onPurchase?.(this.pattern, this.colorPalette ?? null);
-    }
   }
 
   render() {
@@ -114,19 +107,6 @@ export class PatternButton extends LitElement {
             )}
           </div>
         </button>
-
-        ${this.requiresPurchase
-          ? html`
-              <button
-                class="w-full px-4 py-2 bg-green-500 text-white border-0 rounded-md text-sm font-semibold cursor-pointer transition-colors duration-200
-                   hover:bg-green-600"
-                @click=${this.handlePurchase}
-              >
-                ${translateText("territory_patterns.purchase")}
-                (${this.pattern!.product!.price})
-              </button>
-            `
-          : null}
       </div>
     `;
   }
@@ -196,8 +176,8 @@ function generatePreviewDataUrl(
   pattern ??= DefaultPattern;
   const patternLookupKey = [
     pattern.name,
-    pattern.colorPalette?.primaryColor ?? "undefined",
-    pattern.colorPalette?.secondaryColor ?? "undefined",
+    pattern.colorPalette?.primary ?? "undefined",
+    pattern.colorPalette?.secondary ?? "undefined",
     width,
     height,
   ].join("-");
@@ -244,11 +224,11 @@ function generatePreviewDataUrl(
   // Create an image
   const imageData = ctx.createImageData(width, height);
   const data = imageData.data;
-  const primary = pattern.colorPalette?.primaryColor
-    ? new Colord(pattern.colorPalette.primaryColor).toRgb()
+  const primary = pattern.colorPalette?.primary
+    ? new Colord(pattern.colorPalette.primary).toRgb()
     : DEFAULT_PRIMARY;
-  const secondary = pattern.colorPalette?.secondaryColor
-    ? new Colord(pattern.colorPalette.secondaryColor).toRgb()
+  const secondary = pattern.colorPalette?.secondary
+    ? new Colord(pattern.colorPalette.secondary).toRgb()
     : DEFAULT_SECONDARY;
   let i = 0;
   for (let y = 0; y < height; y++) {

@@ -2,15 +2,14 @@ import type { TemplateResult } from "lit";
 import { html, LitElement, render } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
 import { UserMeResponse } from "../core/ApiSchemas";
-import { ColorPalette, Cosmetics, Pattern } from "../core/CosmeticSchemas";
+import { ColorPalette, Cosmetics, Pattern } from "../core/schemas/cosmetic";
 import { UserSettings } from "../core/game/UserSettings";
-import { PlayerPattern } from "../core/Schemas";
+import { PlayerPattern } from "../core/schemas";
 import "./components/Difficulties";
 import "./components/PatternButton";
 import { renderPatternPreview } from "./components/PatternButton";
 import {
   fetchCosmetics,
-  handlePurchase,
   patternRelationship,
 } from "./Cosmetics";
 import { translateText } from "./Utils";
@@ -45,7 +44,7 @@ export class TerritoryPatternsModal extends LitElement {
 
   async onUserMe(userMeResponse: UserMeResponse | null) {
     // if (userMeResponse === null) {
-    //   this.userSettings.setSelectedPatternName(undefined);
+    //   this.userSettings.setSelectedPattern(undefined);
     //   this.selectedPattern = null;
     //   this.selectedColor = null;
     // }
@@ -56,7 +55,7 @@ export class TerritoryPatternsModal extends LitElement {
     // Load selected pattern and color from localStorage regardless of login status
     this.selectedPattern =
       this.cosmetics !== null
-        ? this.userSettings.getSelectedPatternName(this.cosmetics)
+        ? this.userSettings.getSelectedPattern(this.cosmetics)
         : null;
     this.selectedColor = this.userSettings.getSelectedColor() ?? null;
     
@@ -122,8 +121,7 @@ export class TerritoryPatternsModal extends LitElement {
             ] ?? null}
             .requiresPurchase=${rel === "purchasable"}
             .onSelect=${(p: PlayerPattern | null) => this.selectPattern(p)}
-            .onPurchase=${(p: Pattern, colorPalette: ColorPalette | null) =>
-              handlePurchase(p, colorPalette)}
+            .onPurchase=${(p: Pattern, colorPalette: ColorPalette | null) => {}}
           ></pattern-button>
         `);
       }
@@ -155,8 +153,8 @@ export class TerritoryPatternsModal extends LitElement {
     // Get all colors from cosmetics.json color palettes
     const allColorPalettes = Object.values(this.cosmetics?.colorPalettes ?? {});
     const paletteColors = [
-      ...allColorPalettes.map(palette => palette.primaryColor),
-      ...allColorPalettes.map(palette => palette.secondaryColor),
+      ...allColorPalettes.map(palette => palette.primary),
+      ...allColorPalettes.map(palette => palette.secondary),
     ];
     
     // Combine and remove duplicates
@@ -211,14 +209,14 @@ export class TerritoryPatternsModal extends LitElement {
     this.selectedColor = null;
     this.userSettings.setSelectedColor(undefined);
     if (pattern === null) {
-      this.userSettings.setSelectedPatternName(undefined);
+      this.userSettings.setSelectedPattern(undefined);
     } else {
       const name =
         pattern.colorPalette?.name === undefined
           ? pattern.name
           : `${pattern.name}:${pattern.colorPalette.name}`;
 
-      this.userSettings.setSelectedPatternName(`pattern:${name}`);
+      this.userSettings.setSelectedPattern(`pattern:${name}`);
     }
     this.selectedPattern = pattern;
     
@@ -235,7 +233,7 @@ export class TerritoryPatternsModal extends LitElement {
 
   private selectColor(hexCode: string) {
     this.selectedPattern = null;
-    this.userSettings.setSelectedPatternName(undefined);
+    this.userSettings.setSelectedPattern(undefined);
     this.selectedColor = hexCode;
     this.userSettings.setSelectedColor(hexCode);
     
