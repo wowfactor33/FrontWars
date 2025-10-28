@@ -84,6 +84,7 @@ export class StructureIconsLayer implements Layer {
   ]);
   private lastGhostQueryAt: number;
   potentialUpgrade: StructureRenderInfo | undefined;
+  private lastUpgradeTime: number = 0;
 
   constructor(
     private game: GameView,
@@ -276,6 +277,14 @@ export class StructureIconsLayer implements Layer {
         this.ghostUnit.buildableUnit = unit;
 
         if (unit.canUpgrade) {
+          // Check if on cooldown
+          if (this.isOnCooldown()) {
+            this.ghostUnit.container.filters = [
+              new OutlineFilter({ thickness: 2, color: "rgba(255, 136, 0, 1)" }), // Orange color for cooldown
+            ];
+            return;
+          }
+          
           this.potentialUpgrade = this.renders.find(
             (r) =>
               r.unit.id() === unit.canUpgrade &&
@@ -305,6 +314,12 @@ export class StructureIconsLayer implements Layer {
       });
   }
 
+  private isOnCooldown(): boolean {
+    const cooldownTicks = this.game.config().upgradeCooldownTicks();
+    const cooldownMs = cooldownTicks * 100; // 100ms per tick
+    return Date.now() - this.lastUpgradeTime < cooldownMs;
+  }
+
   private createStructure(e: MouseUpEvent) {
     if (!this.ghostUnit) return;
     if (
@@ -320,6 +335,7 @@ export class StructureIconsLayer implements Layer {
     const y = e.y - rect.top;
     const tile = this.transformHandler.screenToWorldCoordinates(x, y);
     if (this.ghostUnit.buildableUnit.canUpgrade !== false) {
+      this.lastUpgradeTime = Date.now();
       this.eventBus.emit(
         new SendUpgradeStructureIntentEvent(
           this.ghostUnit.buildableUnit.canUpgrade,

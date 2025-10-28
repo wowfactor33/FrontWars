@@ -129,6 +129,8 @@ export class BuildMenu extends LitElement implements Layer {
   public playerActions: PlayerActions | null;
   private filteredBuildTable: BuildItemDisplay[][] = buildTable;
   public transformHandler: TransformHandler;
+  
+  private lastUpgradeTime: number = 0;
 
   init() {
     this.eventBus.on(ShowBuildMenuEvent, (e) => {
@@ -232,6 +234,16 @@ export class BuildMenu extends LitElement implements Layer {
     }
     .build-button:disabled .build-cost {
       color: #ff4444;
+    }
+    .build-button.cooldown {
+      background-color: #2a1a1a;
+      border-color: #ff8800;
+    }
+    .build-button.cooldown img {
+      opacity: 0.6;
+    }
+    .build-button.cooldown .build-cost {
+      color: #ff8800;
     }
     .build-icon {
       font-size: 40px;
@@ -365,7 +377,15 @@ export class BuildMenu extends LitElement implements Layer {
     if (unit.length === 0) {
       return false;
     }
-    return unit[0].canBuild !== false || unit[0].canUpgrade !== false;
+    const canBuild = unit[0].canBuild !== false;
+    const canUpgrade = unit[0].canUpgrade !== false;
+    
+    // If it's an upgrade, check cooldown
+    if (canUpgrade && this.isOnCooldown()) {
+      return false;
+    }
+    
+    return canBuild || canUpgrade;
   }
 
   public cost(item: BuildItemDisplay): Gold {
@@ -388,6 +408,7 @@ export class BuildMenu extends LitElement implements Layer {
 
   public sendBuildOrUpgrade(buildableUnit: BuildableUnit, tile: TileRef): void {
     if (buildableUnit.canUpgrade !== false) {
+      this.lastUpgradeTime = Date.now();
       this.eventBus.emit(
         new SendUpgradeStructureIntentEvent(
           buildableUnit.canUpgrade,
@@ -398,6 +419,19 @@ export class BuildMenu extends LitElement implements Layer {
       this.eventBus.emit(new BuildUnitIntentEvent(buildableUnit.type, tile));
     }
     this.hideMenu();
+  }
+
+  public isOnCooldown(): boolean {
+    const cooldownTicks = this.game.config().upgradeCooldownTicks();
+    const cooldownMs = cooldownTicks * 100; // 100ms per tick
+    return Date.now() - this.lastUpgradeTime < cooldownMs;
+  }
+
+  public getRemainingCooldownMs(): number {
+    const cooldownTicks = this.game.config().upgradeCooldownTicks();
+    const cooldownMs = cooldownTicks * 100; // 100ms per tick
+    const elapsed = Date.now() - this.lastUpgradeTime;
+    return Math.max(0, cooldownMs - elapsed);
   }
 
   render() {
@@ -416,18 +450,29 @@ export class BuildMenu extends LitElement implements Layer {
                 if (buildableUnit === undefined) {
                   return html``;
                 }
-                const enabled =
-                  buildableUnit.canBuild !== false ||
-                  buildableUnit.canUpgrade !== false;
+                const canBuild = buildableUnit.canBuild !== false;
+                const canUpgrade = buildableUnit.canUpgrade !== false;
+                const isOnCooldown = canUpgrade && this.isOnCooldown();
+                const enabled = (canBuild || canUpgrade) && !isOnCooldown;
+                
+                let titleText = "";
+                if (!enabled) {
+                  if (isOnCooldown) {
+                    const remainingMs = this.getRemainingCooldownMs();
+                    const remainingSeconds = (remainingMs / 1000).toFixed(1);
+                    titleText = `Cooldown: ${remainingSeconds}s remaining`;
+                  } else {
+                    titleText = translateText("build_menu.not_enough_money");
+                  }
+                }
+                
                 return html`
                   <button
-                    class="build-button"
+                    class="build-button ${isOnCooldown ? 'cooldown' : ''}"
                     @click=${() =>
                       this.sendBuildOrUpgrade(buildableUnit, this.clickedTile)}
                     ?disabled=${!enabled}
-                    title=${!enabled
-                      ? translateText("build_menu.not_enough_money")
-                      : ""}
+                    title=${titleText}
                   >
                     <img
                       src=${item.icon}

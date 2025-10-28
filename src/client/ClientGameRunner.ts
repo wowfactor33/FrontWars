@@ -212,6 +212,10 @@ export class ClientGameRunner {
     private gameView: GameView,
   ) {
     this.lastMessageTime = Date.now();
+    // Set upgrade cooldown from config (in milliseconds)
+    const cooldownTicks = this.gameView.config().upgradeCooldownTicks();
+    const cooldownMs = cooldownTicks * 100; // 100ms per tick
+    this.transport.setUpgradeCooldown(cooldownMs);
   }
 
   private saveGame(update: WinUpdate) {

@@ -180,6 +180,9 @@ export class Transport {
 
   private pingInterval: number | null = null;
   public readonly isLocal: boolean;
+  
+  private lastUpgradeTime: number = 0;
+  private upgradeCooldownMs: number = 1000; // Default 1 second
   constructor(
     private lobbyConfig: LobbyConfig,
     private eventBus: EventBus,
@@ -464,7 +467,23 @@ export class Transport {
     });
   }
 
+  public setUpgradeCooldown(cooldownMs: number): void {
+    this.upgradeCooldownMs = cooldownMs;
+  }
+
   private onSendUpgradeStructureIntent(event: SendUpgradeStructureIntentEvent) {
+    const now = Date.now();
+    
+    if (now - this.lastUpgradeTime < this.upgradeCooldownMs) {
+      const remainingMs = this.upgradeCooldownMs - (now - this.lastUpgradeTime);
+      const remainingSeconds = remainingMs / 1000;
+      console.warn(
+        `[Transport] upgrade cooldown not yet elapsed. Remaining: ${remainingSeconds.toFixed(1)}s`,
+      );
+      return;
+    }
+    
+    this.lastUpgradeTime = now;
     this.sendIntent({
       type: "upgrade_structure",
       unit: event.unitType,
