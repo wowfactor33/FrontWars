@@ -10,6 +10,7 @@ import { AlternateViewEvent, RefreshGraphicsEvent } from "../../InputHandler";
 import { PauseGameEvent } from "../../Transport";
 import { translateText } from "../../Utils";
 import { Layer } from "./Layer";
+import { AdProvider } from "../../AdProvider";
 
 const button = ({
   classes = "",
@@ -82,7 +83,7 @@ export class OptionsMenu extends LitElement implements Layer {
       if (!isConfirmed) return;
     }
     // redirect to the home page
-    CrazySDK.redirectTo("/");
+    AdProvider.redirectTo("/");
   }
 
   createRenderRoot() {

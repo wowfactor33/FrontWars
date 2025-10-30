@@ -44,6 +44,7 @@ export class MainRadialMenu extends LitElement implements Layer {
     super();
 
     const menuConfig: RadialMenuConfig = {
+      menuTransitionDuration: 0,
       centerButtonIcon: swordIcon,
       tooltipStyle: `
         .radial-tooltip .cost {

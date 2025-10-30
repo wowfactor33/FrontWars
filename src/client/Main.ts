@@ -41,6 +41,7 @@ import { NewsButton } from "./components/NewsButton";
 import "./components/baseComponents/Button";
 import "./components/baseComponents/Modal";
 import { discordLogin, getUserMe, isLoggedIn } from "./jwt";
+import { scale } from "./Scale";
 import "./styles.css";
 
 declare global {
@@ -91,14 +92,6 @@ class Client {
   constructor() {}
 
   initialize(): void {
-    // const gameVersion = document.getElementById(
-    //   "game-version",
-    // ) as HTMLDivElement;
-    // if (!gameVersion) {
-    //   console.warn("Game version element not found");
-    // }
-    // gameVersion.innerText = version;
-
     const newsModal = document.querySelector("news-modal") as NewsModal;
     if (!newsModal) {
       console.warn("News modal element not found");
@@ -390,6 +383,8 @@ class Client {
       this.handleHash();
     };
 
+    scale.init();
+
     // Handle browser navigation & manual hash edits
     window.addEventListener("popstate", onHashUpdate);
     window.addEventListener("hashchange", onHashUpdate);
@@ -410,6 +405,23 @@ class Client {
         updateSliderProgress(slider);
         slider.addEventListener("input", () => updateSliderProgress(slider));
       });
+  }
+
+  private buildUrlWithSearchParams(hash: string): string {
+    // Preserve existing search params
+    const searchParams = new URLSearchParams(window.location.search);
+    
+    // If CrazyGames, ensure crazygames=true is set
+    if (CrazySDK.isCrazyGames) {
+      searchParams.set("crazygames", "true");
+    }
+    if (AdProvider.isExpo) {
+      searchParams.set("expo", "true");
+    }
+    
+    // Build the URL with pathname + search + hash
+    const searchString = searchParams.toString();
+    return window.location.pathname + (searchString ? `?${searchString}` : "") + hash;
   }
 
   private handleHash() {
@@ -496,7 +508,7 @@ class Client {
       }
     }
     if (decodedHash.startsWith("#refresh")) {
-      CrazySDK.redirectTo("/");
+      AdProvider.redirectTo("/");
     }
   }
 
@@ -620,9 +632,11 @@ class Client {
 
         // Ensure there's a homepage entry in history before adding the lobby entry
         if (window.location.hash === "" || window.location.hash === "#") {
-          history.pushState(null, "", window.location.origin + "#refresh");
+          const refreshUrl = this.buildUrlWithSearchParams("#refresh");
+          history.pushState(null, "", refreshUrl);
         }
-        history.pushState(null, "", `#join=${lobby.gameID}`);
+        const joinUrl = this.buildUrlWithSearchParams(`#join=${lobby.gameID}`);
+        history.pushState(null, "", joinUrl);
 
         CrazySDK.gameplayStart();
       },

@@ -1,3 +1,5 @@
+import { AdProvider } from "./AdProvider";
+
 declare global {
   interface Window {
     CrazyGames: {
@@ -232,17 +234,6 @@ class CrazyGamesSDKManager {
   clearBanners(): void {
     if (this.isCrazyGames) {
       window.CrazyGames.SDK.banner.clearAllBanners();
-    }
-  }
-
-  redirectTo(url: string): void {
-    if (this.isCrazyGames) {
-      // Parse the URL and add the crazygames parameter
-      const urlObj = new URL(url, window.location.origin);
-      urlObj.searchParams.set("crazygames", "true");
-      window.location.href = urlObj.toString();
-    } else {
-      window.location.href = url;
     }
   }
 

@@ -69,6 +69,12 @@ export class OModal extends LitElement {
       overflow-y: auto;
       backdrop-filter: blur(8px);
     }
+
+    @media (max-width: 459px) {
+      .c-modal__content {
+        padding: 0;
+      }
+    }
   `;
   public open() {
     this.isModalOpen = true;

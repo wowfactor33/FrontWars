@@ -1,8 +1,10 @@
 import { EventBus } from "../../core/EventBus";
 import { GameView } from "../../core/game/GameView";
 import { UserSettings } from "../../core/game/UserSettings";
+import { AdProvider } from "../AdProvider";
 import { GameStartingModal } from "../GameStartingModal";
 import { RefreshGraphicsEvent as RedrawGraphicsEvent } from "../InputHandler";
+import { scale } from "../Scale";
 import { TransformHandler } from "./TransformHandler";
 import { UIState } from "./UIState";
 import { AlertFrame } from "./layers/AlertFrame";
@@ -53,6 +55,13 @@ export function createRenderer(
     "game-starting-modal",
   ) as GameStartingModal;
   startingModal.hide();
+
+  // Show game banner and render ingame ad
+  const gameBanner = document.getElementById("game-banner");
+  if (gameBanner) {
+    gameBanner.style.display = "flex";
+    void AdProvider.renderIngameBanner();
+  }
 
   // TODO maybe append this to document instead of querying for them?
   const emojiTable = document.querySelector("emoji-table") as EmojiTable;
@@ -256,6 +265,9 @@ export function createRenderer(
     alertFrame,
     fpsDisplay,
   ];
+
+  // Apply scale on init
+  scale.onResize();
 
   return new GameRenderer(
     game,

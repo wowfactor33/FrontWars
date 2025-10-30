@@ -387,6 +387,12 @@ export class ClientGameRunner {
       clearInterval(this.connectionCheckInterval);
       this.connectionCheckInterval = null;
     }
+
+    // Hide game banner when returning to menu
+    const gameBanner = document.getElementById("game-banner");
+    if (gameBanner) {
+      gameBanner.style.display = "none";
+    }
   }
 
   private inputEvent(event: MouseUpEvent) {

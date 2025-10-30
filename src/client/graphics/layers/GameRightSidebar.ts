@@ -16,6 +16,7 @@ import { translateText } from "../../Utils";
 import { Layer } from "./Layer";
 import { ShowReplayPanelEvent } from "./ReplayPanel";
 import { ShowSettingsModalEvent } from "./SettingsModal";
+import { AdProvider } from "../../AdProvider";
 
 @customElement("game-right-sidebar")
 export class GameRightSidebar extends LitElement implements Layer {
@@ -99,7 +100,7 @@ export class GameRightSidebar extends LitElement implements Layer {
     if (CrazySDK.isCrazyGames) {
       CrazySDK.gameplayStop();
       CrazySDK.requestMidGameAd(() => {
-        CrazySDK.redirectTo("/");
+        AdProvider.redirectTo("/");
       });
     } else {
       window.location.href = "/";
@@ -118,8 +119,9 @@ export class GameRightSidebar extends LitElement implements Layer {
     return html`
       <aside
         class=${`flex flex-col max-h-[calc(100vh-80px)] overflow-y-auto p-2 bg-gray-800/70 backdrop-blur-sm shadow-xs rounded-tl-lg rounded-bl-lg transition-transform duration-300 ease-out transform ${
-          this._isVisible ? "translate-x-0" : "translate-x-full"
+          this._isVisible ? "" : "hidden"
         }`}
+        style="transform-origin: top right;"
         @contextmenu=${(e: Event) => e.preventDefault()}
       >
         <div

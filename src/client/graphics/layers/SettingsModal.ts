@@ -18,6 +18,7 @@ import { PauseGameEvent } from "../../Transport";
 import { translateText } from "../../Utils";
 import SoundManager from "../../sound/SoundManager";
 import { Layer } from "./Layer";
+import { AdProvider } from "../../AdProvider";
 
 export class ShowSettingsModalEvent {
   constructor(
@@ -157,7 +158,7 @@ export class SettingsModal extends LitElement implements Layer {
 
   private onExitButtonClick() {
     // redirect to the home page
-    CrazySDK.redirectTo("/");
+    AdProvider.redirectTo("/");
   }
 
   private onVolumeChange(event: Event) {

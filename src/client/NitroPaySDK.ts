@@ -15,8 +15,10 @@ declare global {
 class NitroPaySDKManager {
   private isInitialized = false;
   private loadPromise: Promise<void> | null = null;
+  public enabled = false;
 
   async init({ shouldLoad }: { shouldLoad: boolean }): Promise<void> {
+    this.enabled = shouldLoad;
     if (!shouldLoad) return; // do not load on CrazyGames
     await this.ensureScript();
   }
@@ -48,6 +50,7 @@ class NitroPaySDKManager {
     options?: Record<string, any>,
     ...rest: any[]
   ): Promise<void> {
+    if (!this.enabled) return;
     try {
       this.showBanner(id);
       await this.ensureScript();

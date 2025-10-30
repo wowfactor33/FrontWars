@@ -116,6 +116,13 @@
         transform-origin: top;
         transition: transform 0.3s ease-in-out;
       }
+
+      /* Hide game banner on screens smaller than 728px */
+      @media (max-width: 728px) {
+        #game-banner {
+          display: none !important;
+        }
+      }
     </style>
 
     <!-- Immediate execution to prevent FOUC -->
@@ -135,7 +142,7 @@
     <!-- Main container with responsive padding -->
     <main class="flex justify-center flex-grow">
       <div
-        class="scale-container w-full flex justify-center items-center gap-4"
+        class="scale-container w-full flex justify-center items-center gap-6"
       >
 
         <!-- Ad banner left -->
@@ -176,15 +183,15 @@
           ></o-button> -->
 
           <div class="container__row">
-            <flag-input class="w-[20%] md:w-[15%]"></flag-input>
+            <flag-input class="w-24 md:w-24"></flag-input>
             <button
               id="territory-patterns-input-preview-button"
-              class="border w-[20%] md:w-[15%] p-[4px] rounded-lg flex cursor-pointer justify-center b-button"
+              class="border w-20 md:w-20 p-[4px] rounded-lg flex cursor-pointer justify-center b-button"
               title="Pick a pattern!"
             ></button>
             <username-input class="relative w-full"></username-input>
             <news-button
-              class="w-[20%] md:w-[15%] component-hideable"
+              class="w-20 md:w-20 component-hideable"
             ></news-button>
           </div>
           <div>
@@ -232,12 +239,6 @@
           </div>
           <!-- <div
             id="cg-banner-bottom"
-            class="ad w-full mt-4"
-            style="height: 90px"
-          ></div> -->
-          <!-- NitroPay representative banner (bottom) -->
-          <!-- <div
-            id="frontwars-728x90"
             class="ad w-full mt-4"
             style="height: 90px"
           ></div> -->
@@ -363,7 +364,10 @@
     <game-starting-modal></game-starting-modal>
     <game-top-bar></game-top-bar>
     <unit-display></unit-display>
-    <div class="flex fixed top-[20px] right-[20px] z-[1000] items-start gap-2">
+    <div id="game-banner" class="flex fixed top-0 z-[1000] w-full justify-center" style="display: none;">
+      <div id="frontwars-728x90" class="ad" style="width: 728px; height: 90px; display: none;"></div>
+    </div>
+    <div class="flex fixed top-[20px] right-0 z-[1000] items-start gap-2">
       <replay-panel></replay-panel>
       <game-right-sidebar></game-right-sidebar>
     </div>
@@ -377,7 +381,6 @@
     <multi-tab-modal></multi-tab-modal>
     <news-modal></news-modal>
     <game-left-sidebar></game-left-sidebar>
-    <spawn-ad></spawn-ad>
     <flag-input-modal></flag-input-modal>
     <fps-display></fps-display>
     <language-modal></language-modal>
@@ -390,93 +393,6 @@
           document.documentElement.classList.remove("preload");
         });
       });
-    </script>
-
-    <!-- Adaptive JS scaling for .scale-container -->
-    <script>
-      (function () {
-        function vh(v) {
-          var h = Math.max(
-            document.documentElement.clientHeight,
-            window.innerHeight || 0,
-          );
-          return (v * h) / 100;
-        }
-
-        function vw(v) {
-          var w = Math.max(
-            document.documentElement.clientWidth,
-            window.innerWidth || 0,
-          );
-          return (v * w) / 100;
-        }
-
-        function gcd(a = window.innerWidth, b = window.innerHeight) {
-          return b == 0 ? a : gcd(b, a % b);
-        }
-
-        function computeScale() {
-          var height = Math.max(
-            document.documentElement.clientHeight,
-            window.innerHeight || 0,
-          );
-          var baseHeight = 892;
-          if (height >= baseHeight) return 1;
-          return Math.min(1, height / baseHeight);
-        }
-
-        var ticking = false;
-
-        function applyScale() {
-          var container = document.querySelector(".scale-container");
-          if (!container) return;
-          var scale = computeScale();
-          container.style.transform = "scale(" + scale + ")";
-          updateBannerVisibility(scale);
-        }
-
-        function updateBannerVisibility(scale) {
-          var leftBanner = document.getElementById("ad-banner-left");
-          var rightBanner = document.getElementById("ad-banner-right");
-
-          if (!leftBanner || !rightBanner) return;
-
-          var width =
-            Math.max(
-              document.documentElement.clientWidth,
-              window.innerWidth || 0,
-            ) / scale;
-
-          // Calculate scaled breakpoints
-          var leftBannerBreakpoint = 980 / scale;
-          var bothBannersBreakpoint = 720 / scale;
-
-          if (width <= bothBannersBreakpoint) {
-            // Hide both banners
-            leftBanner.style.display = "none";
-            rightBanner.style.display = "none";
-          } else if (width <= leftBannerBreakpoint) {
-            // Hide only left banner
-            leftBanner.style.display = "none";
-            rightBanner.style.display = "block";
-          } else {
-            // Show both banners
-            leftBanner.style.display = "block";
-            rightBanner.style.display = "block";
-          }
-        }
-
-        function onResize() {
-          requestAnimationFrame(function () {
-            applyScale();
-          });
-        }
-
-        window.addEventListener("resize", onResize);
-        window.addEventListener("DOMContentLoaded", applyScale);
-        // Fallback for late-mounted content
-        onResize();
-      })();
     </script>
   </body>
 </html>

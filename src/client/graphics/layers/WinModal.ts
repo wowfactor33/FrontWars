@@ -11,6 +11,7 @@ import { CrazySDK } from "../../CrazyGamesSDK";
 import { getUserMe } from "../../jwt";
 import { SendWinnerEvent } from "../../Transport";
 import { Layer } from "./Layer";
+import { AdProvider } from "../../AdProvider";
 
 @customElement("win-modal")
 export class WinModal extends LitElement implements Layer {
@@ -208,7 +209,7 @@ export class WinModal extends LitElement implements Layer {
 
   private _handleExit() {
     this.hide();
-    CrazySDK.redirectTo("/");
+    AdProvider.redirectTo("/");
   }
 
   init() {}

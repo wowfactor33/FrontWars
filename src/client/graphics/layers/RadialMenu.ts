@@ -3,6 +3,7 @@ import backIcon from "../../../../resources/images/BackIconWhite.svg";
 import { EventBus, GameEvent } from "../../../core/EventBus";
 import { CloseViewEvent } from "../../InputHandler";
 import { translateText } from "../../Utils";
+import { scale } from "../../Scale";
 import { Layer } from "./Layer";
 import {
   CenterButtonElement,
@@ -153,7 +154,7 @@ export class RadialMenu implements Layer {
         "transition",
         `top ${this.config.menuTransitionDuration}ms ease, left ${this.config.menuTransitionDuration}ms ease`,
       )
-      .style("transform", "translate(-50%, -50%)")
+      .style("transform", `translate(-50%, -50%) scale(${scale.computeIngameScale(0.4, 0.8)})`)
       .style("pointer-events", "all")
       .on("click", (event) => this.hideRadialMenu());
 

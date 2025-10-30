@@ -47,6 +47,12 @@
   backdrop-filter: blur(8px);
 }
 
+@media (max-width: 459px) {
+  .c-modal__content {
+    padding: 0;
+  }
+}
+
 /*This will be removed in future*/
 o-modal o-button {
   @media (min-width: 1024px) {

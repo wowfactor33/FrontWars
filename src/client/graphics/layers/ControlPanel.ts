@@ -9,6 +9,7 @@ import { AttackRatioEvent } from "../../InputHandler";
 import { renderNumber, renderTroops } from "../../Utils";
 import { UIState } from "../UIState";
 import { Layer } from "./Layer";
+import { scale } from "../../Scale";
 
 @customElement("control-panel")
 export class ControlPanel extends LitElement implements Layer {
@@ -165,6 +166,7 @@ export class ControlPanel extends LitElement implements Layer {
           ? "w-full sm:max-w-[320px] text-sm sm:text-base bg-gray-800/70 p-2 " +
             "pr-3 sm:p-4 shadow-lg sm:rounded-lg backdrop-blur"
           : "hidden"}"
+        style="transform-origin: bottom left; transform: scale(${scale.computeIngameScale(0.5, 1)});"
         @contextmenu=${(e: MouseEvent) => e.preventDefault()}
       >
         <div class="block bg-black/30 text-white mb-4 p-2 rounded">

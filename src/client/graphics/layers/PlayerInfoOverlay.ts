@@ -31,6 +31,7 @@ import {
 import { TransformHandler } from "../TransformHandler";
 import { Layer } from "./Layer";
 import { CloseRadialMenuEvent } from "./RadialMenu";
+import { scale } from "../../Scale";
 
 function euclideanDistWorld(
   coord: { x: number; y: number },
@@ -193,8 +194,7 @@ export class PlayerInfoOverlay extends LitElement implements Layer {
   ) {
     return !this.game.config().isUnitDisabled(type)
       ? html`<div
-          class="flex p-1 w-[calc(50%-0.13rem)] border rounded-md border-gray-500
-                         items-center gap-2 text-sm opacity-80"
+          class="flex p-1 w-[calc(50%-0.13rem)] border rounded-md border-gray-500 items-center gap-2 text-sm opacity-80"
           translate="no"
         >
           <img
@@ -439,6 +439,7 @@ export class PlayerInfoOverlay extends LitElement implements Layer {
     return html`
       <div
         class="block lg:flex fixed top-[150px] right-0 w-full z-50 flex-col max-w-[180px]"
+        style="transform-origin: top right; transform: scale(${scale.ingameScale});"
         @contextmenu=${(e: MouseEvent) => e.preventDefault()}
       >
         <div
