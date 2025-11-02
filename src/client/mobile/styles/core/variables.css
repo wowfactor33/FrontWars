@@ -1,0 +1,52 @@
+:root {
+  --theme: "light";
+  --breakPoint-tablet: 800px;
+  --breakPoint-Desktop: 1024px;
+  --blur-md: 4px;
+  --boxBackgroundColor: #111827cc;
+  --fontColor: #202020;
+  --fontColorLight: #fff;
+  --primaryColor: #2563eb;
+  --primaryColorHover: #1d4ed8;
+  --primaryColorDisabled: linear-gradient(
+    to right,
+    rgb(74, 74, 74),
+    rgb(61, 61, 61)
+  );
+  --secondaryColor: #dbeafe;
+  --secondaryColorHover: #bfdbfe;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --primaryColorDark: #3b82f6;
+  --primaryColorHoverDark: #2563eb;
+  --primaryColorDisabledDark: #4b5563;
+  --secondaryColorDark: #374151;
+  --secondaryColorHoverDark: #4b5563;
+  --fontColorDark: #f3f4f6;
+}
+
+/* Seasonal: Halloween palette (light mode) */
+:root.halloween {
+  --boxBackgroundColor: #2d1b4ecc; /* dark mystical purple backdrop, lighter than dark theme */
+  --fontColor: #2f2f2f; /* charcoal black for excellent contrast */
+  --primaryColor: #cc5500; /* darker pumpkin orange */
+  --primaryColorHover: #b34700; /* darker orange for hover */
+  --primaryColorDisabled: linear-gradient(
+    to right,
+    #8b0000,
+    #660000
+  ); /* blood red gradient for disabled state */
+  --secondaryColor: #fed7aa; /* light pumpkin orange for spooky warmth */
+  --secondaryColorHover: #fdba74; /* slightly darker orange for hover */
+}
+
+/* Seasonal: Halloween palette (dark mode) */
+.dark.halloween {
+  --boxBackgroundColor: #1a1a1acc; /* near black with transparency for true dark mode */
+  --fontColorDark: #f8f8ff; /* ghost white for excellent contrast on dark */
+  --primaryColorDark: #cc5500; /* darker pumpkin orange for dark mode */
+  --primaryColorHoverDark: #b34700; /* darker orange for hover in dark mode */
+  --primaryColorDisabledDark: #4a4a4a; /* neutral dark gray */
+  --secondaryColorDark: #2f2f2f; /* charcoal for secondary elements */
+  --secondaryColorHoverDark: #404040; /* slightly lighter charcoal for hover */
+}

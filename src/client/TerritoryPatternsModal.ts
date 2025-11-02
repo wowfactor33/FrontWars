@@ -263,8 +263,8 @@ export class TerritoryPatternsModal extends LitElement {
 
   public async refresh() {
     const preview = this.selectedColor
-      ? this.renderColorPreview(this.selectedColor, 48, 48)
-      : renderPatternPreview(this.selectedPattern ?? null, 48, 48);
+      ? this.renderColorPreview(this.selectedColor, 60, 60)
+      : renderPatternPreview(this.selectedPattern ?? null, 60, 60);
     this.requestUpdate();
 
     // Wait for the DOM to be updated and the o-modal element to be available

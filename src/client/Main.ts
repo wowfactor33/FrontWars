@@ -42,7 +42,19 @@ import "./components/baseComponents/Button";
 import "./components/baseComponents/Modal";
 import { discordLogin, getUserMe, isLoggedIn } from "./jwt";
 import { scale } from "./Scale";
-import "./styles.css";
+
+// Dynamically import mobile CSS if running in Expo/mobile environment
+if (AdProvider.isMobile) {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore - CSS imports are handled by webpack
+  void import("./mobile/styles.css");
+  console.log("Mobile CSS imported");
+} else {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore - CSS imports are handled by webpack
+  void import("./desktop/styles.css");
+  console.log("Desktop CSS imported");
+}
 
 declare global {
   interface Window {
@@ -360,9 +372,6 @@ class Client {
       document.documentElement.classList.remove("dark");
     }
 
-    // Halloween
-    document.documentElement.classList.add("halloween");
-
     // Attempt to join lobby
     this.handleHash();
 
@@ -415,7 +424,7 @@ class Client {
     if (CrazySDK.isCrazyGames) {
       searchParams.set("crazygames", "true");
     }
-    if (AdProvider.isExpo) {
+    if (AdProvider.isMobile) {
       searchParams.set("expo", "true");
     }
     

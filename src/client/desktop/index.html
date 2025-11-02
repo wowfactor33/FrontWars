@@ -24,11 +24,11 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
     <title>FrontWars</title>
-    <link rel="manifest" href="../../resources/manifest.json" />
+    <link rel="manifest" href="/resources/manifest.json" />
     <link
       rel="icon"
       type="image/x-icon"
-      href="../../resources/images/Favicon.svg"
+      href="/resources/images/Favicon.svg"
     />
 
     <!-- SEO -->
@@ -123,6 +123,10 @@
           display: none !important;
         }
       }
+
+      #game-banner {
+        background: #3c3c3c;
+      }
     </style>
 
     <!-- Immediate execution to prevent FOUC -->
@@ -160,9 +164,9 @@
         <div class="container">
           <header class="l-header">
             <div class="l-header__content">
-              <img src="../../resources/images/logo/fw.svg" alt="FrontWars Halloween Logo" class="l-header__logo">
+              <img src="/resources/images/logo/fw.svg" alt="FrontWars Halloween Logo" class="l-header__logo">
               <div class="halloween-pumpkin-container" style="display: none; position: absolute; top: -25px; left: 0; transform: translateX(-50%) rotate(-27deg); transform-origin: 50px 50px; width: 95px; height: 95px; pointer-events: none; z-index: 10; margin: 0; padding: 0;">
-                <img src="../../resources/images/logo/dark_pumpkin.png" alt="Halloween Pumpkin" style="width: 100%; height: 100%; object-fit: contain; filter: brightness(1.1) contrast(1.2) saturate(1.1);" />
+                <img src="/resources/images/logo/dark_pumpkin.png" alt="Halloween Pumpkin" style="width: 100%; height: 100%; object-fit: contain; filter: brightness(1.1) contrast(1.2) saturate(1.1);" />
               </div>
             </div>
           </header>
@@ -266,16 +270,13 @@
       style="width: 4.5rem; height: 4.5rem; background-color: #0075ff"
     >
       <img
-        src="../../resources/images/SettingIconWhite.svg"
+        src="/resources/images/SettingIconWhite.svg"
         alt="Settings"
         style="width: 72px; height: 72px"
       />
     </button>
 
     <!-- Game components -->
-    <div id="customMenu" class="mt-4 sm:mt-6 lg:mt-8">
-      <ul></ul>
-    </div>
     <div id="app"></div>
     <div id="radialMenu" class="radial-menu"></div>
     <div class="flex gap-2 fixed right-[10px] top-[10px] z-50 flex-col">
@@ -364,8 +365,8 @@
     <game-starting-modal></game-starting-modal>
     <game-top-bar></game-top-bar>
     <unit-display></unit-display>
-    <div id="game-banner" class="flex fixed top-0 z-[1000] w-full justify-center" style="display: none;">
-      <div id="frontwars-728x90" class="ad" style="width: 728px; height: 90px; display: none;"></div>
+    <div id="game-banner" class="flex fixed top-[10px] z-[1000] w-full justify-center" style="display: none;">
+      <div id="frontwars-728x90" class="ad" style="width: 728px; display: none;"></div>
     </div>
     <div class="flex fixed top-[20px] right-0 z-[1000] items-start gap-2">
       <replay-panel></replay-panel>

@@ -1,10 +1,9 @@
 import { AdProvider } from "./AdProvider";
-import { isMobileDevice } from "./Utils";
 
 class Scale {
   public scale = 1;
   public ingameScale = 1;
-  public isMobile = isMobileDevice();
+  public isMobile = AdProvider.isMobile;
 
   init() {
     window.addEventListener("resize", () => this.onResize());
@@ -18,7 +17,7 @@ class Scale {
       document.documentElement.clientHeight,
       window.innerHeight || 0,
     );
-    const baseHeight = 760;
+    const baseHeight = this.isMobile ? 540 : 760;
     if (height >= baseHeight) return 1;
     return Math.min(1, height / baseHeight);
   }
@@ -42,8 +41,12 @@ class Scale {
     if (!container) return;
     this.scale = this.computeScale();
     this.ingameScale = this.computeIngameScale();
-    container.style.transform = "scale(" + this.scale + ")";
-    
+    if (this.isMobile) {
+      container.style.transform = "translate(-50%, -50%) scale(" + this.scale + ")";
+    } else {
+      container.style.transform = "scale(" + this.scale + ")";
+    }
+
     const gameLeftSidebar = document.querySelector("game-left-sidebar aside") as HTMLElement;
     if (gameLeftSidebar) {
       gameLeftSidebar.style.transform = "scale(" + this.ingameScale + ")";

@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import "./LanguageModal";
+import type { LanguageModal } from "./LanguageModal";
 
 import ar from "../../resources/lang/ar.json";
 import bg from "../../resources/lang/bg.json";
@@ -34,6 +35,7 @@ import tp from "../../resources/lang/tp.json";
 import tr from "../../resources/lang/tr.json";
 import uk from "../../resources/lang/uk.json";
 import zh_CN from "../../resources/lang/zh-CN.json";
+import { AdProvider } from "./AdProvider";
 
 @customElement("lang-selector")
 export class LangSelector extends LitElement {
@@ -41,10 +43,10 @@ export class LangSelector extends LitElement {
   @state() public defaultTranslations: Record<string, string> | undefined;
   @state() public currentLang: string = "en";
   @state() private languageList: any[] = [];
-  @state() private showModal: boolean = false;
   @state() private debugMode: boolean = false;
 
   private debugKeyPressed: boolean = false;
+  private languageModalEl: LanguageModal | null = null;
 
   private languageMap: Record<string, any> = {
     ar,
@@ -88,7 +90,50 @@ export class LangSelector extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     this.setupDebugKey();
-    this.initializeLanguage();
+    void this.initializeLanguage();
+    this.attachLanguageModal();
+  }
+
+  disconnectedCallback(): void {
+    this.detachLanguageModal();
+    super.disconnectedCallback();
+  }
+
+  private attachLanguageModal() {
+    const modal = document.querySelector("language-modal") as
+      | LanguageModal
+      | null;
+
+    if (!modal) {
+      console.warn("Language modal element not found");
+      return;
+    }
+
+    if (modal === this.languageModalEl) {
+      return;
+    }
+
+    this.detachLanguageModal();
+
+    this.languageModalEl = modal;
+    modal.addEventListener("language-selected", this.handleModalLanguageSelected);
+    modal.addEventListener("close-modal", this.handleModalClosed);
+
+    this.syncLanguageModalData();
+  }
+
+  private detachLanguageModal() {
+    if (!this.languageModalEl) return;
+
+    this.languageModalEl.removeEventListener(
+      "language-selected",
+      this.handleModalLanguageSelected,
+    );
+    this.languageModalEl.removeEventListener(
+      "close-modal",
+      this.handleModalClosed,
+    );
+    this.languageModalEl = null;
   }
 
   private setupDebugKey() {
@@ -98,6 +143,29 @@ export class LangSelector extends LitElement {
     window.addEventListener("keyup", (e) => {
       if (e.key?.toLowerCase() === "t") this.debugKeyPressed = false;
     });
+  }
+
+  private handleModalLanguageSelected = (event: Event) => {
+    const detail = (event as CustomEvent<{ lang?: string }>).detail;
+    if (!detail || typeof detail.lang !== "string") {
+      return;
+    }
+
+    this.changeLanguage(detail.lang);
+  };
+
+  private handleModalClosed = () => {
+    this.debugMode = this.debugKeyPressed;
+  };
+
+  private syncLanguageModalData() {
+    if (!this.languageModalEl) {
+      return;
+    }
+
+    this.languageModalEl.languageList = this.languageList;
+    this.languageModalEl.currentLang = this.currentLang;
+    this.languageModalEl.requestUpdate();
   }
 
   private getClosestSupportedLang(lang: string): string {
@@ -127,6 +195,7 @@ export class LangSelector extends LitElement {
 
     await this.loadLanguageList();
     this.applyTranslation();
+    this.syncLanguageModalData();
   }
 
   private loadLanguage(lang: string): Record<string, string> {
@@ -193,6 +262,7 @@ export class LangSelector extends LitElement {
       if (debugLang) finalList.push(debugLang);
 
       this.languageList = finalList;
+      this.syncLanguageModalData();
     } catch (err) {
       console.error("Failed to load language list:", err);
     }
@@ -203,7 +273,8 @@ export class LangSelector extends LitElement {
     this.translations = this.loadLanguage(lang);
     this.currentLang = lang;
     this.applyTranslation();
-    this.showModal = false;
+    this.syncLanguageModalData();
+    this.languageModalEl?.close?.({ silent: true });
   }
 
   private applyTranslation() {
@@ -275,8 +346,13 @@ export class LangSelector extends LitElement {
 
   private openModal() {
     this.debugMode = this.debugKeyPressed;
-    this.showModal = true;
+
+    if (!this.languageModalEl) {
+      this.attachLanguageModal();
+    }
+
     this.loadLanguageList();
+    this.languageModalEl?.show?.();
   }
 
   render() {
@@ -295,15 +371,35 @@ export class LangSelector extends LitElement {
             svg: "uk_us_flag",
           });
 
-    return html`
-      <div class="container__row">
+    if (AdProvider.isMobile) {
+      return html`
         <button
           id="lang-selector"
           @click=${this.openModal}
-          class="c-button c-button--secondary text-center appearance-none w-full p-3 font-medium
+          class="mobile-menu-item success lucky-font
+          "
+        >
+          <img
+            id="lang-flag"
+            class="w-12 h-8"
+            src="/flags/${currentLang.svg}.svg"
+            alt="flag"
+          />
+          <span id="lang-name">${currentLang.native} (${currentLang.en})</span>
+        </button>
+      `;
+    }
+
+    return html`
+      <div class="container__row w-full">
+        <button
+          id="lang-selector"
+          @click=${this.openModal}
+          class="c-button text-center appearance-none w-full font-medium
           text-sm sm:text-base lg:text-lg rounded-md border-none cursor-pointer
           transition-colors duration-300 flex items-center gap-2
-          justify-center"
+          ${AdProvider.isMobile ? "success" : "justify-center p-3 c-button--secondary"}
+          "
         >
           <img
             id="lang-flag"
@@ -314,15 +410,6 @@ export class LangSelector extends LitElement {
           <span id="lang-name">${currentLang.native} (${currentLang.en})</span>
         </button>
       </div>
-
-      <language-modal
-        .visible=${this.showModal}
-        .languageList=${this.languageList}
-        .currentLang=${this.currentLang}
-        @language-selected=${(e: CustomEvent) =>
-          this.changeLanguage(e.detail.lang)}
-        @close-modal=${() => (this.showModal = false)}
-      ></language-modal>
     `;
   }
 }

@@ -1,27 +1,52 @@
 import { LitElement, html } from "lit";
-import { customElement, property } from "lit/decorators.js";
+import { customElement, property, query } from "lit/decorators.js";
 import { translateText } from "../client/Utils";
+import "./components/baseComponents/Modal";
 
 @customElement("language-modal")
 export class LanguageModal extends LitElement {
-  @property({ type: Boolean }) visible = false;
   @property({ type: Array }) languageList: any[] = [];
   @property({ type: String }) currentLang = "en";
+
+  @query("o-modal") private modalEl!: HTMLElement & {
+    open: () => void;
+    close: () => void;
+    isModalOpen: boolean;
+  };
 
   createRenderRoot() {
     return this; // Use Light DOM for TailwindCSS classes
   }
 
-  private close = () => {
+  public show() {
+    this.requestUpdate();
+    this.modalEl?.open();
+  }
+
+  public open() {
+    this.show();
+  }
+
+  public hide(options?: { silent?: boolean }) {
+    this.close(options);
+  }
+
+  public close(options?: { silent?: boolean }) {
+    const wasVisible = this.modalEl?.isModalOpen;
+    this.modalEl?.close();
+
+    if (wasVisible && !options?.silent) {
+      this.emitCloseEvent();
+    }
+  }
+
+  private emitCloseEvent() {
     this.dispatchEvent(
       new CustomEvent("close-modal", {
         bubbles: true,
         composed: true,
       }),
     );
-  };
-
-  updated(changedProps: Map<string, unknown>) {
   }
 
   connectedCallback() {
@@ -35,6 +60,8 @@ export class LanguageModal extends LitElement {
   }
 
   private handleKeyDown = (e: KeyboardEvent) => {
+    if (!this.modalEl?.isModalOpen) return;
+
     if (e.code === "Escape") {
       e.preventDefault();
       this.close();
@@ -52,30 +79,10 @@ export class LanguageModal extends LitElement {
   };
 
   render() {
-    if (!this.visible) return null;
-
     return html`
-      <aside
-        class="fixed p-4 z-[1000] inset-0 bg-black/50 overflow-y-auto flex items-center justify-center"
-      >
-        <div
-          class="bg-gray-800/80 dark:bg-gray-900/90 backdrop-blur-md rounded-lg min-w-[340px] max-w-[480px] w-full"
-        >
-          <header
-            class="relative rounded-t-md text-lg bg-black/60 dark:bg-black/80 text-center text-white px-6 py-4 pr-10"
-          >
-            ${translateText("select_lang.title")}
-            <div
-              class="cursor-pointer absolute right-4 top-4 font-bold hover:text-gray-300"
-              @click=${this.close}
-            >
-              ✕
-            </div>
-          </header>
-
-          <section
-            class="relative text-white dark:text-gray-100 p-6 max-h-[60dvh] overflow-y-auto"
-          >
+      <o-modal title="${translateText("select_lang.title")}">
+        <div class="modal-overlay">
+          <div class="modal-content">
             ${this.languageList.map((lang) => {
               const isActive = this.currentLang === lang.code;
               const isDebug = lang.code === "debug";
@@ -108,9 +115,9 @@ export class LanguageModal extends LitElement {
                 </button>
               `;
             })}
-          </section>
+          </div>
         </div>
-      </aside>
+      </o-modal>
     `;
   }
 }

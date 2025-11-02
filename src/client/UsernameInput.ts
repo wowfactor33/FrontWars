@@ -8,6 +8,7 @@ import {
   validateUsername,
 } from "../core/validations/username";
 import { CrazySDK } from "./CrazyGamesSDK";
+import { AdProvider } from "./AdProvider";
 
 const usernameKey: string = "username";
 
@@ -44,7 +45,7 @@ export class UsernameInput extends LitElement {
         @change=${this.handleChange}
         placeholder="${translateText("username.enter_username")}"
         maxlength="${MAX_USERNAME_LENGTH}"
-        class="b-button border rounded-xl w-full px-4 py-2 text-2xl text-center"
+        class="${AdProvider.isMobile ? "c-input" : "b-button border text-center"} rounded-xl w-full px-4 py-2 text-2xl"
       />
       ${this.validationError
         ? html`<div

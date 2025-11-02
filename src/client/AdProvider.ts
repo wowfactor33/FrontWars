@@ -3,6 +3,11 @@ import { NitroPaySDK } from "./NitroPaySDK";
 
 function isWithinExpo(): boolean {
   try {
+    // Check if IS_MOBILE is set to true in environment
+    if (process.env.IS_MOBILE === "TRUE" || process.env.IS_MOBILE === "true") {
+      return true;
+    }
+
     const urlParams = new URLSearchParams(self.location.search);
     if (urlParams.has("expo")) return true;
 
@@ -28,7 +33,7 @@ function isWithinExpo(): boolean {
 
 class AdProviderManager {
   public readonly isCrazyGames = CrazySDK.isCrazyGames;
-  public readonly isExpo = isWithinExpo();
+  public readonly isMobile = isWithinExpo();
   private initialized = false;
 	private refreshTimerId: number | null = null;
 
@@ -49,8 +54,8 @@ class AdProviderManager {
     void CrazySDK.init();
 
 		// Initialize NitroPay only if not in CrazyGames (non-blocking)
-		console.log("isExpo: ", this.isExpo);
-		void NitroPaySDK.init({ shouldLoad: !this.isExpo && !this.isCrazyGames });
+		console.log("isMobile: ", this.isMobile);
+		void NitroPaySDK.init({ shouldLoad: !this.isMobile && !this.isCrazyGames });
 
 		// Initial render across providers
 		void this.renderBanners();
@@ -116,7 +121,7 @@ class AdProviderManager {
 		const leftBannerBreakpoint = 880 / scale;
 		const bothBannersBreakpoint = 720 / scale;
 
-		if (this.isExpo || (width <= bothBannersBreakpoint)) {
+		if (this.isMobile || (width <= bothBannersBreakpoint)) {
 			// Hide both banners
 			leftBanner.style.display = "none";
 			rightBanner.style.display = "none";
@@ -138,7 +143,7 @@ class AdProviderManager {
       const urlObj = new URL(url, window.location.origin);
       urlObj.searchParams.set("crazygames", "true");
       window.location.href = urlObj.toString();
-    } else if (this.isExpo) {
+    } else if (this.isMobile) {
       const urlObj = new URL(url, window.location.origin);
       urlObj.searchParams.set("expo", "true");
       window.location.href = urlObj.toString();

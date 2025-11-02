@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  max-width: 720px !important;
+  flex-direction: column;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.container__row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.container__row--equal > * {
+  flex: 1 1 100%;
+}

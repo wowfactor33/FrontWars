@@ -182,7 +182,7 @@ export class Transport {
   public readonly isLocal: boolean;
   
   private lastUpgradeTime: number = 0;
-  private upgradeCooldownMs: number = 1000; // Default 1 second
+  private upgradeCooldownMs: number = 200;
   constructor(
     private lobbyConfig: LobbyConfig,
     private eventBus: EventBus,

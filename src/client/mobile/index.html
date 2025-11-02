@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F5P8MBF1TZ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() { dataLayer.push(arguments); }
+      gtag("js", new Date());
+      gtag("config", "G-F5P8MBF1TZ");
+    </script>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
+    <title>FrontWars</title>
+    <link rel="manifest" href="/resources/manifest.json" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="/resources/images/Favicon.svg"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+
+    <!-- SEO -->
+    <link rel="canonical" href="https://frontwars.io/" />
+    <meta
+      name="description"
+      content="Conquer the world in this multiplayer battle royale! Expand your nation, eliminate opponents, and dominate the map in this fast-paced IO game."
+    />
+
+    <!-- Open Graph -->
+    <meta property="og:url" content="https://frontwars.io/" />
+    <meta property="og:title" content="FrontWars - Battle Royale" />
+    <meta
+      property="og:description"
+      content="Conquer the world in this multiplayer battle royale! Expand your nation, eliminate opponents, and dominate the map in this fast-paced IO game."
+    />
+    <meta
+      property="og:image"
+      content="https://frontwars.io/resources/images/GameplayScreenshot.png"
+    />
+    <meta property="og:type" content="game" />
+
+    <!-- Critical CSS to prevent FOUC -->
+    <style>
+      .preload * {
+        -webkit-transition: none !important;
+        -moz-transition: none !important;
+        -ms-transition: none !important;
+        -o-transition: none !important;
+        transition: none !important;
+      }
+
+      html {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      html.preload {
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      /* Prevent vertical scrolling on main page */
+      html,
+      body {
+        overflow: hidden;
+      }
+
+      main {
+        height: 100%;
+        position: relative;
+      }
+
+      .bg-image {
+        content: "";
+        background-image: url("/images/mobile/bg.png");
+        background-position: center;
+        background-attachment: fixed;
+        background-size: cover;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        filter: blur(4px);
+        z-index: -1;
+      }
+
+      /* display:none if child has class parent-hidden since we can't use shadow DOM in Lit due to Tailwind */
+      .component-hideable:has(> .parent-hidden) {
+        display: none;
+      }
+
+      /* Hide side banners on small screens - handled by JavaScript for scale-aware behavior */
+
+      /* Scale container based on screen height */
+      .scale-container {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform-origin: center;
+        transition: transform 0.3s ease-in-out;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: fit-content;
+        max-width: 100%;
+        width: 100%;
+      }
+
+      /* Hide game banner on screens smaller than 728px */
+      @media (max-width: 728px) {
+        #game-banner {
+          display: none !important;
+        }
+      }
+
+      #game-banner {
+        background: #3c3c3c;
+      }
+    </style>
+
+    <!-- Immediate execution to prevent FOUC -->
+    <script>
+      document.documentElement.className = "preload";
+    </script>
+
+    <!-- NitroPay ads are loaded dynamically via NitroPaySDK -->
+    <script data-cfasync="false">window.nitroAds=window.nitroAds||{createAd:function(){return new Promise(e=>{window.nitroAds.queue.push(["createAd",arguments,e])})},addUserToken:function(){window.nitroAds.queue.push(["addUserToken",arguments])},queue:[]};</script>
+  </head>
+
+  <body
+    class="h-full select-none font-sans min-h-screen bg-opacity-0 bg-cover bg-center bg-fixed transition-opacity duration-300 ease-in-out flex flex-col"
+  >
+    <div class="bg-image"></div>
+
+    <!-- Main container with responsive padding -->
+    <main class="flex justify-center flex-grow">
+      <!-- Mobile Menu Button -->
+      <button id="mobile-menu-button" class="mobile-menu-button lucky-font" aria-label="Menu">
+        <span></span>
+      </button>
+
+      <div
+        class="scale-container"
+      >
+        <div class="container gap-6">
+          <header class="l-header">
+            <div class="l-header__content">
+              <img src="/resources/images/logo/fw.svg" alt="FrontWars Logo" class="l-header__logo">
+            </div>
+          </header>
+
+          <div class="flex justify-between gap-4">
+            <div class="flex-1">
+              <public-lobby class="block"></public-lobby>
+            </div>
+            <div class="flex flex-col gap-2 flex-1">
+              <o-button
+                id="single-player"
+                title="Single Player"
+                translationKey="main.single_player"
+                block
+              ></o-button>
+              <o-button
+                id="host-lobby-button"
+                title="Create Lobby"
+                translationKey="main.create_lobby"
+                block
+                secondary
+              ></o-button>
+              <o-button
+                id="join-private-lobby-button"
+                title="Join Lobby"
+                translationKey="main.join_lobby"
+                block
+                secondary
+              ></o-button>
+              <o-button
+                id="help-button"
+                title="Instructions"
+                translationKey="main.instructions"
+                block
+                secondary
+              ></o-button>
+            </div>
+          </div>
+          
+          <div class="container__row">
+            <username-input class="relative w-full"></username-input>
+            <flag-input class="w-[80px]"></flag-input>
+            <button
+              id="territory-patterns-input-preview-button"
+              class="w-[80px] rounded-lg flex cursor-pointer justify-center b-button"
+              title="Pick a pattern!"
+            ></button>
+            <news-button class="w-[80px] component-hideable"
+            ></news-button>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- Game components -->
+    <div id="app"></div>
+    <div id="radialMenu" class="radial-menu"></div>
+    <div class="flex gap-2 fixed right-[10px] top-[10px] z-50 flex-col">
+      <options-menu></options-menu>
+      <player-info-overlay></player-info-overlay>
+    </div>
+    <div
+      class="fixed bottom-[30px] sm:bottom-auto sm:top-[20px] z-50 mx-auto max-w-max inset-x-0 items-center"
+    >
+      <heads-up-message></heads-up-message>
+    </div>
+
+    <div
+      class="bottom-0 w-full flex-col-reverse sm:flex-row z-50 md:w-[320px]"
+      style="position: fixed; pointer-events: none"
+    >
+      <div
+        class="w-full md:w-2/3 md:fixed sm:right-0 md:bottom-0 md:flex flex-col items-end"
+        style="pointer-events: none"
+      >
+        <chat-display></chat-display>
+        <events-display></events-display>
+      </div>
+      <div style="pointer-events: auto">
+        <control-panel></control-panel>
+      </div>
+    </div>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobile-sidebar-overlay" class="mobile-sidebar-overlay"></div>
+
+    <!-- Mobile Sidebar -->
+    <div id="mobile-sidebar" class="mobile-sidebar">
+      <div class="mobile-sidebar-content">
+        <button class="mobile-menu-item primary lucky-font" id="settings-button">
+          <span class="mobile-menu-item-icon">⚙️</span>
+          <span>Settings</span>
+        </button>
+        
+        <lang-selector></lang-selector>
+
+        <div class="mobile-social-buttons">
+          <a href="https://discord.gg/cuF4d6UMG3" target="_blank" rel="noopener noreferrer" class="c-button c-button--discord">
+            <svg class="social-icon" viewBox="0 -28.5 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" fill="#000000">
+              <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+              <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+              <g id="SVGRepo_iconCarrier"><g><path d="M216.856339,16.5966031 C200.285002,8.84328665 182.566144,3.2084988 164.041564,0 C161.766523,4.11318106 159.108624,9.64549908 157.276099,14.0464379 C137.583995,11.0849896 118.072967,11.0849896 98.7430163,14.0464379 C96.9108417,9.64549908 94.1925838,4.11318106 91.8971895,0 C73.3526068,3.2084988 55.6133949,8.86399117 39.0420583,16.6376612 C5.61752293,67.146514 -3.4433191,116.400813 1.08711069,164.955721 C23.2560196,181.510915 44.7403634,191.567697 65.8621325,198.148576 C71.0772151,190.971126 75.7283628,183.341335 79.7352139,175.300261 C72.104019,172.400575 64.7949724,168.822202 57.8887866,164.667963 C59.7209612,163.310589 61.5131304,161.891452 63.2445898,160.431257 C105.36741,180.133187 151.134928,180.133187 192.754523,160.431257 C194.506336,161.891452 196.298154,163.310589 198.110326,164.667963 C191.183787,168.842556 183.854737,172.420929 176.223542,175.320965 C180.230393,183.341335 184.861538,190.991831 190.096624,198.16893 C211.238746,191.588051 232.743023,181.531619 254.911949,164.955721 C260.227747,108.668201 245.831087,59.8662432 216.856339,16.5966031 Z M85.4738752,135.09489 C72.8290281,135.09489 62.4592217,123.290155 62.4592217,108.914901 C62.4592217,94.5396472 72.607595,82.7145587 85.4738752,82.7145587 C98.3405064,82.7145587 108.709962,94.5189427 108.488529,108.914901 C108.508531,123.290155 98.3405064,135.09489 85.4738752,135.09489 Z M170.525237,135.09489 C157.88039,135.09489 147.510584,123.290155 147.510584,108.914901 C147.510584,94.5396472 157.658606,82.7145587 170.525237,82.7145587 C183.391518,82.7145587 193.761324,94.5189427 193.539891,108.914901 C193.539891,123.290155 183.391518,135.09489 170.525237,135.09489 Z" fill="#ffffff" fill-rule="nonzero"> </path> </g> </g>
+            </svg>
+            <span>Discord</span>
+          </a>
+          <a href="https://www.reddit.com/r/FrontWars/" target="_blank" rel="noopener noreferrer" class="c-button c-button--reddit">
+            <svg class="social-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+              <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.701zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.094.33.33 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z"/>
+            </svg>
+            <span>Reddit</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="mobile-sidebar-footer">
+        <a href="/terms-of-service.html" class="mobile-footer-link">Terms of Service</a>
+        <a href="/privacy-policy.html" class="mobile-footer-link">Privacy Policy</a>
+        <a href="/about.txt" class="mobile-footer-link">About</a>
+      </div>
+    </div>
+
+    <!-- Game modals and overlays -->
+    <single-player-modal></single-player-modal>
+    <host-lobby-modal></host-lobby-modal>
+    <join-private-lobby-modal></join-private-lobby-modal>
+    <emoji-table></emoji-table>
+    <build-menu></build-menu>
+    <win-modal></win-modal>
+    <game-starting-modal></game-starting-modal>
+    <game-top-bar></game-top-bar>
+    <unit-display></unit-display>
+    <div id="game-banner" class="flex fixed top-[10px] z-[1000] w-full justify-center" style="display: none;">
+    </div>
+    <div class="flex fixed top-[20px] right-0 z-[1000] items-start gap-2">
+      <replay-panel></replay-panel>
+      <game-right-sidebar></game-right-sidebar>
+    </div>
+    <settings-modal></settings-modal>
+    <player-panel></player-panel>
+    <help-modal></help-modal>
+    <alert-frame></alert-frame>
+    <chat-modal></chat-modal>
+    <user-setting></user-setting>
+    <multi-tab-modal></multi-tab-modal>
+    <news-modal></news-modal>
+    <game-left-sidebar></game-left-sidebar>
+    <flag-input-modal></flag-input-modal>
+    <fps-display></fps-display>
+    <language-modal></language-modal>
+    <territory-patterns-modal></territory-patterns-modal>
+    <!-- Scripts -->
+    <script>
+      // Remove preload class after everything is loaded
+      window.addEventListener("load", function () {
+        requestAnimationFrame(() => {
+          document.documentElement.classList.remove("preload");
+        });
+      });
+
+      // Mobile Menu Toggle
+      (function() {
+        const menuButton = document.getElementById('mobile-menu-button');
+        const sidebar = document.getElementById('mobile-sidebar');
+        const overlay = document.getElementById('mobile-sidebar-overlay');
+        
+        function toggleMenu() {
+          const isActive = sidebar.classList.contains('active');
+          sidebar.classList.toggle('active');
+          overlay.classList.toggle('active');
+          menuButton.classList.toggle('active');
+          if (isActive) {
+            setTimeout(() => {
+              menuButton.style.zIndex = '0';
+            }, 200);
+          } else {
+            menuButton.style.zIndex = '9999';
+          }
+        }
+        
+        function closeMenu() {
+          sidebar.classList.remove('active');
+          overlay.classList.remove('active');
+          menuButton.classList.remove('active');
+          setTimeout(() => {
+            menuButton.style.zIndex = '0';
+          }, 200);
+        }
+        
+        menuButton.addEventListener('click', toggleMenu);
+        overlay.addEventListener('click', closeMenu);
+        
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'Escape' && sidebar.classList.contains('active')) {
+            closeMenu();
+          }
+        });
+
+        // Close menu when a menu item, lang-selector, footer link, or social button is clicked
+        document.querySelectorAll('.mobile-menu-item, lang-selector, .mobile-footer-link, .mobile-social-buttons .c-button').forEach(item => {
+          item.addEventListener('click', () => {
+            closeMenu();
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

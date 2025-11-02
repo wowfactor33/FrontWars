@@ -1,0 +1,14 @@
+.l-header {
+  display: flex;
+  justify-content: center;
+  transform: scale(0.75);
+}
+
+.l-header__content {
+  display: flex;
+  flex: 1;
+  max-width: 600px;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}

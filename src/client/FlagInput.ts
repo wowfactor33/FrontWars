@@ -3,6 +3,7 @@ import { customElement, state } from "lit/decorators.js";
 import { renderPlayerFlag } from "../core/CustomFlag";
 import { FlagSchema } from "../core/schemas";
 import { translateText } from "./Utils";
+import { AdProvider } from "./AdProvider";
 
 const flagKey: string = "flag";
 
@@ -73,7 +74,7 @@ export class FlagInput extends LitElement {
       <div class="flex relative">
         <button
           id="flag-input_"
-            class="b-button border rounded-lg flex cursor-pointer"
+            class="b-button ${AdProvider.isMobile ? "" : "border rounded-lg"} flex cursor-pointer"
           title=${translateText("flag_input.button_title")}
         >
           <span

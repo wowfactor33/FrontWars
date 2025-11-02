@@ -6,6 +6,7 @@ import { GameID, GameInfo } from "../core/schemas";
 import { generateID } from "../core/Util";
 import { JoinLobbyEvent } from "./Main";
 import { terrainMapFileLoader } from "./TerrainMapFileLoader";
+import { AdProvider } from "./AdProvider";
 
 @customElement("public-lobby")
 export class PublicLobby extends LitElement {
@@ -112,6 +113,83 @@ export class PublicLobby extends LitElement {
         : null;
 
     const mapImageSrc = this.mapImages.get(lobby.gameID);
+
+    if (AdProvider.isMobile) {
+      const buttonClass = `public-lobby-button ${this.isLobbyHighlighted ? "public-lobby-button--highlighted" : ""}`;
+      
+      return html`
+        <button
+          @click=${() => this.lobbyClicked(lobby)}
+          ?disabled=${this.isButtonDebounced}
+          class="${buttonClass} lucky-font isolate grid h-[288px] grid-cols-[100%] grid-rows-[100%] place-content-stretch w-full overflow-hidden relative"
+        >
+          ${mapImageSrc
+            ? html`<img
+                src="${mapImageSrc}"
+                alt="${lobby.gameConfig.gameMap}"
+                class="place-self-start col-span-full row-span-full h-full w-full -z-10 object-cover opacity-40"
+                style="mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 40%, rgba(0,0,0,0.8) 100%)"
+              />`
+            : html`<div
+                class="place-self-start col-span-full row-span-full h-full -z-10 bg-gradient-to-br from-slate-800 to-slate-900"
+              ></div>`}
+          <div
+            class="flex flex-col justify-between h-full col-span-full row-span-full p-4 text-left z-10 relative"
+            style="background: linear-gradient(to bottom, rgba(0,0,0,0.15) 0%, transparent 30%, transparent 70%, rgba(0,0,0,0.4) 100%)"
+          >
+            <div class="flex flex-col gap-4">
+              <div class="text-[32px] text-white lucky-font">
+                ${translateText("public_lobby.join")}
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="flex gap-2 col-span-2">
+                  <span
+                    class="public-lobby-badge-mode text-lg text-white rounded-lg px-3 py-1.5 shadow-lg"
+                  >
+                    ${translateText(`economy_mode.${lobby.gameConfig.economyMode.toLowerCase()}`)}
+                  </span>
+                  <span
+                    class="public-lobby-badge-mode text-lg text-white rounded-lg px-3 py-1.5 shadow-lg"
+                  >
+                    ${lobby.gameConfig.gameMode === GameMode.Team
+                      ? typeof teamCount === "string"
+                        ? translateText(`public_lobby.teams_${teamCount}`)
+                        : translateText("public_lobby.teams", {
+                            num: teamCount ?? 0,
+                          })
+                      : translateText("game_mode.ffa")}
+                  </span>
+                </div>
+                <span
+                  class="public-lobby-badge-map text-md text-white rounded-lg px-3 py-1.5 shadow-lg col-span-2"
+                >
+                  ${translateText(
+                    `map.${lobby.gameConfig.gameMap.toLowerCase().replace(/\s+/g, "")}`,
+                  )}
+                </span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 mt-auto">
+              <div class="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 shadow-lg border border-white/30">
+                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM12.93 17c.046-.327.07-.66.07-1a6.97 6.97 0 00-1.5-4.33A5 5 0 0119 16v1h-6.07zM6 11a5 5 0 015 5v1H1v-1a5 5 0 015-5z"/>
+                </svg>
+                <span class="text-lg text-white">
+                  ${lobby.numClients} / ${lobby.gameConfig.maxPlayers}
+                </span>
+              </div>
+              <div class="flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 shadow-lg border border-white/30">
+                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                </svg>
+                <span class="text-lg text-white">${timeDisplay}</span>
+              </div>
+            </div>
+          </div>
+        </button>
+      `;
+    }
 
     return html`
       <button

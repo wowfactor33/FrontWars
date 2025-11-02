@@ -1,0 +1,410 @@
+/* Mobile Menu Sidebar Styles */
+.mobile-menu-button {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  width: 60px;
+  height: 60px;
+  z-index: 0;
+  background: linear-gradient(135deg, #ff6b6b 0%, #ff8e53 100%);
+  border: none;
+  border-radius: 18px;
+  cursor: pointer;
+  box-shadow: 
+    0 8px 20px rgba(255, 107, 107, 0.4),
+    0 0 0 4px rgba(0, 0, 0, 1),
+    inset 0 2px 4px rgba(255, 255, 255, 0.3);
+  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+
+.mobile-menu-button:active {
+  transform: scale(0.9);
+  box-shadow: 
+    0 4px 10px rgba(255, 107, 107, 0.3),
+    0 0 0 4px rgba(0, 0, 0, 1),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-menu-button span {
+  display: block;
+  width: 28px;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.mobile-menu-button span::before,
+.mobile-menu-button span::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 3px;
+  background: white;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+  left: 0;
+}
+
+.mobile-menu-button span::before {
+  top: -10px;
+}
+
+.mobile-menu-button span::after {
+  bottom: -10px;
+}
+
+.mobile-menu-button.active span {
+  background: transparent;
+}
+
+.mobile-menu-button.active span::before {
+  top: 0;
+  transform: rotate(45deg);
+}
+
+.mobile-menu-button.active span::after {
+  bottom: 0;
+  transform: rotate(-45deg);
+}
+
+.mobile-sidebar {
+  position: fixed;
+  right: -100%;
+  top: 0;
+  width: 85%;
+  max-width: 440px;
+  height: 100vh;
+  background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  z-index: 9998;
+  transition: right 0.2s ease-in;
+  box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
+  overflow-y: auto;
+  padding: 80px 20px 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-sidebar.active {
+  right: 0;
+}
+
+.mobile-sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 9997;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-sidebar-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-menu-item {
+  width: 100%;
+  margin: 12px 0;
+  padding: 8px 24px;
+  border: none;
+  border-radius: 16px;
+  font-size: 28px;
+  text-align: left;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  color: white;
+  border: 4px solid rgb(0, 0, 0);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 
+    0 6px 15px rgba(0, 0, 0, 0.3),
+    inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.mobile-menu-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.mobile-menu-item:hover::before,
+.mobile-menu-item:active::before {
+  left: 100%;
+}
+
+/* Fancy button styles - Primary */
+.mobile-menu-item.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  box-shadow: 
+    0 8px 20px rgba(102, 126, 234, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.mobile-menu-item.primary:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 
+    0 4px 10px rgba(102, 126, 234, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Fancy button styles - Success */
+.mobile-menu-item.success {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  box-shadow: 
+    0 8px 20px rgba(17, 153, 142, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.mobile-menu-item.success:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 
+    0 4px 10px rgba(17, 153, 142, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Fancy button styles - Warning */
+.mobile-menu-item.warning {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  box-shadow: 
+    0 8px 20px rgba(245, 87, 108, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-item.warning:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 
+    0 4px 10px rgba(245, 87, 108, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Fancy button styles - Info */
+.mobile-menu-item.info {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  box-shadow: 
+    0 8px 20px rgba(79, 172, 254, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-item.info:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 
+    0 4px 10px rgba(79, 172, 254, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Fancy button styles - Fun */
+.mobile-menu-item.fun {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+  box-shadow: 
+    0 8px 20px rgba(250, 112, 154, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2),
+    0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+.mobile-menu-item.fun:active {
+  transform: translateY(2px) scale(0.98);
+  box-shadow: 
+    0 4px 10px rgba(250, 112, 154, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-menu-item-icon {
+  font-size: 24px;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.3));
+}
+
+/* Mobile Sidebar Content Wrapper */
+.mobile-sidebar-content {
+  flex: 1;
+}
+
+/* Mobile Sidebar Footer */
+.mobile-sidebar-footer {
+  margin-top: auto;
+  padding-top: 20px;
+  border-top: 2px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.mobile-footer-link {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.mobile-footer-link:hover {
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.mobile-social-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+.mobile-social-buttons .c-button {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.social-icon {
+  width: 28px;
+  height: 28px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+  flex-shrink: 0;
+}
+
+/* Discord Button Styles */
+.c-button--discord {
+  background: linear-gradient(135deg, #5865F2 0%, #4752C4 50%, #5865F2 100%);
+  background-size: 200% 200%;
+  box-shadow: 
+    0 4px 15px rgba(88, 101, 242, 0.4),
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  animation: gradient-shift-discord 3s ease infinite;
+}
+
+@keyframes gradient-shift-discord {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.c-button--discord:hover {
+  background: linear-gradient(135deg, #4752C4 0%, #3c45a5 50%, #4752C4 100%);
+  background-size: 200% 200%;
+  box-shadow: 
+    0 6px 20px rgba(88, 101, 242, 0.6),
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(88, 101, 242, 0.5);
+  animation: gradient-shift-discord-fast 1.5s ease infinite;
+}
+
+@keyframes gradient-shift-discord-fast {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.c-button--discord:active {
+  background: linear-gradient(135deg, #3c45a5 0%, #2f3575 50%, #3c45a5 100%);
+  box-shadow: 
+    0 2px 10px rgba(88, 101, 242, 0.4),
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.c-button--discord:focus {
+  background: linear-gradient(135deg, #4752C4 0%, #3c45a5 50%, #4752C4 100%);
+  background-size: 200% 200%;
+  outline: 3px solid rgba(88, 101, 242, 0.5);
+  box-shadow: 
+    0 6px 20px rgba(88, 101, 242, 0.6),
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    0 0 0 3px rgba(88, 101, 242, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Reddit Button Styles */
+.c-button--reddit {
+  background: linear-gradient(135deg, #FF4500 0%, #FF5700 50%, #FF4500 100%);
+  background-size: 200% 200%;
+  box-shadow: 
+    0 4px 15px rgba(255, 69, 0, 0.4),
+    0 8px 25px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2);
+  animation: gradient-shift-reddit 3s ease infinite;
+}
+
+@keyframes gradient-shift-reddit {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.c-button--reddit:hover {
+  background: linear-gradient(135deg, #FF5700 0%, #e63e00 50%, #FF5700 100%);
+  background-size: 200% 200%;
+  box-shadow: 
+    0 6px 20px rgba(255, 69, 0, 0.6),
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
+    0 0 20px rgba(255, 69, 0, 0.5);
+  animation: gradient-shift-reddit-fast 1.5s ease infinite;
+}
+
+@keyframes gradient-shift-reddit-fast {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.c-button--reddit:active {
+  background: linear-gradient(135deg, #e63e00 0%, #cc3600 50%, #e63e00 100%);
+  box-shadow: 
+    0 2px 10px rgba(255, 69, 0, 0.4),
+    0 4px 15px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.c-button--reddit:focus {
+  background: linear-gradient(135deg, #FF5700 0%, #e63e00 50%, #FF5700 100%);
+  background-size: 200% 200%;
+  outline: 3px solid rgba(255, 69, 0, 0.5);
+  box-shadow: 
+    0 6px 20px rgba(255, 69, 0, 0.6),
+    0 12px 35px rgba(0, 0, 0, 0.4),
+    0 0 0 3px rgba(255, 69, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
