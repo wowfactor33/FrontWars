@@ -74,7 +74,7 @@ export class FlagInput extends LitElement {
       <div class="flex relative">
         <button
           id="flag-input_"
-            class="b-button ${AdProvider.isMobile ? "" : "border rounded-lg"} flex cursor-pointer"
+          class="b-button flex cursor-pointer"
           title=${translateText("flag_input.button_title")}
         >
           <span

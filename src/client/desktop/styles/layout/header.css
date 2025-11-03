@@ -15,11 +15,11 @@
 }
 
 .l-header__logo {
-  filter: drop-shadow(1px 1px 0px rgb(255, 255, 255))
-    drop-shadow(-1px -1px 0px rgb(255, 255, 255))
-    drop-shadow(1px -1px 0px rgb(255, 255, 255))
-    drop-shadow(-1px 1px 0px rgb(255, 255, 255))
-    drop-shadow(3px 3px 0px rgb(255, 255, 255))
+  filter: drop-shadow(1px 1px 0px rgb(124, 58, 237))
+    drop-shadow(-1px -1px 0px rgb(124, 58, 237))
+    drop-shadow(1px -1px 0px rgb(124, 58, 237))
+    drop-shadow(-1px 1px 0px rgb(124, 58, 237))
+    drop-shadow(3px 3px 0px rgb(109, 40, 217))
     drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
 }
 
@@ -35,12 +35,13 @@
 }
 
 .l-header__highlightText {
-  color: #2563eb;
+  color: #7c3aed;
   font-weight: 700;
-  filter: drop-shadow(1px 1px 0px rgb(255, 255, 255))
-    drop-shadow(-1px -1px 0px rgb(255, 255, 255))
-    drop-shadow(1px -1px 0px rgb(255, 255, 255))
-    drop-shadow(-1px 1px 0px rgb(255, 255, 255));
+  filter: drop-shadow(1px 1px 0px rgba(139, 92, 246, 0.4))
+    drop-shadow(-1px -1px 0px rgba(139, 92, 246, 0.4))
+    drop-shadow(1px -1px 0px rgba(139, 92, 246, 0.4))
+    drop-shadow(-1px 1px 0px rgba(139, 92, 246, 0.4))
+    drop-shadow(0px 0px 8px rgba(124, 58, 237, 0.3));
 }
 
 /* Halloween highlight text styling */

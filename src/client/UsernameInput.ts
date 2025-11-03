@@ -45,7 +45,7 @@ export class UsernameInput extends LitElement {
         @change=${this.handleChange}
         placeholder="${translateText("username.enter_username")}"
         maxlength="${MAX_USERNAME_LENGTH}"
-        class="${AdProvider.isMobile ? "c-input" : "b-button border text-center"} rounded-xl w-full px-4 py-2 text-2xl"
+        class="c-input rounded-xl w-full px-4 py-2 text-2xl"
       />
       ${this.validationError
         ? html`<div

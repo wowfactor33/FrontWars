@@ -84,41 +84,57 @@
 }
 
 .b-button {
-  border-color: rgb(209, 213, 219);
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  transition: var(--transition);
+  outline: none;
 }
 
 .b-button:focus {
   outline: none;
-  box-shadow: 0 0 0 2px rgb(59, 130, 246);
-  border-color: rgb(59, 130, 246);
 }
 
-.dark .b-button {
-  background-color: rgb(55, 65, 81);
-  color: rgb(255, 255, 255);
-  border-color: rgba(209, 213, 219, 0.6);
+.c-input {
+  background-color: #ffffff;
+  color: #1f2937;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 20px;
+  outline: 3px solid rgba(167, 139, 250, 0.4);
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: 600;
+  transition: outline-color 0.2s ease;
+  text-align: left;
 }
 
-.halloween .b-button {
-  background-color: var(--secondaryColor);
-  color: var(--fontColor);
-  border-color: var(--primaryColor);
+.c-input::placeholder {
+  color: #9ca3af;
+  opacity: 0.7;
 }
 
-.halloween .b-button:focus {
-  box-shadow: 0 0 0 2px var(--primaryColor);
-  border-color: var(--primaryColor);
+.c-input:focus {
+  outline: 3px solid rgba(167, 139, 250, 0.8);
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
 }
 
-.dark.halloween .b-button {
-  background-color: var(--secondaryColorDark);
-  color: var(--fontColorDark);
-  border-color: var(--primaryColorDark);
+.c-input:hover {
+  outline: 3px solid rgba(167, 139, 250, 0.6);
 }
 
-.dark.halloween .b-button:focus {
-  box-shadow: 0 0 0 2px var(--primaryColorDark);
-  border-color: var(--primaryColorDark);
+.dark .c-input {
+  background-color: #1a1a1a;
+  color: #e5e7eb;
+  outline: 3px solid rgba(139, 92, 246, 0.5);
+}
+
+.dark .c-input::placeholder {
+  color: #9ca3af;
+  opacity: 0.7;
+}
+
+.dark .c-input:focus {
+  outline: 3px solid rgba(139, 92, 246, 0.9);
+  box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.3);
+}
+
+.dark .c-input:hover {
+  outline: 3px solid rgba(139, 92, 246, 0.7);
 }

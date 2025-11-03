@@ -43,7 +43,7 @@ export class NewsButton extends LitElement {
         ${this.isActive ? "active" : ""}"
       >
         <button
-          class="${AdProvider.isMobile ? "b-button" : ""} w-[60px] h-[60px]  flex items-center cursor-pointer"
+          class="b-button w-[60px] h-[60px]  flex items-center cursor-pointer"
           @click=${this.handleClick}
         >
           <img

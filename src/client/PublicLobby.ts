@@ -202,7 +202,7 @@ export class PublicLobby extends LitElement {
             : "bg-gradient-to-r from-green-600 to-green-500"
           : document.documentElement.classList.contains("halloween")
           ? "bg-gradient-to-r from-orange-700 to-orange-600"
-          : "bg-gradient-to-r from-blue-600 to-blue-500"} text-white font-medium rounded-xl transition-opacity duration-200 hover:opacity-90 ${this
+          : "bg-gradient-to-r from-violet-600 to-violet-500"} text-white font-medium rounded-xl transition-opacity duration-200 hover:opacity-90 ${this
           .isButtonDebounced
           ? "opacity-70 cursor-not-allowed"
           : ""}"
@@ -226,7 +226,7 @@ export class PublicLobby extends LitElement {
             </div>
             <div class="text-md font-medium ${document.documentElement.classList.contains("halloween")
                 ? "text-orange-200"
-                : "text-blue-100"}">
+                : "text-violet-100"}">
               <span
                 class="text-sm ${this.isLobbyHighlighted
                   ? document.documentElement.classList.contains("halloween")
@@ -234,7 +234,7 @@ export class PublicLobby extends LitElement {
                     : "text-green-600"
                   : document.documentElement.classList.contains("halloween")
                   ? "text-orange-700"
-                  : "text-blue-600"} bg-white rounded-sm px-1 mr-1"
+                  : "text-violet-600"} bg-white rounded-sm px-1 mr-1"
               >
                 ${translateText(`economy_mode.${lobby.gameConfig.economyMode.toLowerCase()}`)}
               </span>
@@ -245,7 +245,7 @@ export class PublicLobby extends LitElement {
                     : "text-green-600"
                   : document.documentElement.classList.contains("halloween")
                   ? "text-orange-700"
-                  : "text-blue-600"} bg-white rounded-sm px-1"
+                  : "text-violet-600"} bg-white rounded-sm px-1"
               >
                 ${lobby.gameConfig.gameMode === GameMode.Team
                   ? typeof teamCount === "string"
@@ -266,12 +266,12 @@ export class PublicLobby extends LitElement {
           <div>
             <div class="text-md font-medium ${document.documentElement.classList.contains("halloween")
                 ? "text-orange-200"
-                : "text-blue-100"}">
+                : "text-violet-100"}">
               ${lobby.numClients} / ${lobby.gameConfig.maxPlayers}
             </div>
             <div class="text-md font-medium ${document.documentElement.classList.contains("halloween")
                 ? "text-orange-200"
-                : "text-blue-100"}">${timeDisplay}</div>
+                : "text-violet-100"}">${timeDisplay}</div>
           </div>
         </div>
       </button>
