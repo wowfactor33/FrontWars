@@ -424,9 +424,6 @@ class Client {
     if (CrazySDK.isCrazyGames) {
       searchParams.set("crazygames", "true");
     }
-    if (AdProvider.isMobile) {
-      searchParams.set("expo", "true");
-    }
     
     // Build the URL with pathname + search + hash
     const searchString = searchParams.toString();

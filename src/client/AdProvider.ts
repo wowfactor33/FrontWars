@@ -8,15 +8,6 @@ function isWithinExpo(): boolean {
       return true;
     }
 
-    const urlParams = new URLSearchParams(self.location.search);
-    if (urlParams.has("expo")) return true;
-
-    // Check if referrer parent origin includes "expo"
-    if (window !== window.parent && document.referrer) {
-      const parentOrigin = new URL(document.referrer).origin;
-      if (parentOrigin.includes("expo")) return true;
-    }
-
     // Check if current location is mobile.<something>
     const hostname = self.location.hostname;
     if (
@@ -86,6 +77,8 @@ class AdProviderManager {
 	}
 
 	async renderIngameBanner(): Promise<void> {
+		void CrazySDK.requestResponsiveBanner("cg-banner-ingame");
+
 		void NitroPaySDK.renderBanner("frontwars-728x90", {
 			sizes: [["728", "90"]],
 			report: this.nitroCommonOptions.report,
@@ -142,10 +135,6 @@ class AdProviderManager {
       // Parse the URL and add the crazygames parameter
       const urlObj = new URL(url, window.location.origin);
       urlObj.searchParams.set("crazygames", "true");
-      window.location.href = urlObj.toString();
-    } else if (this.isMobile) {
-      const urlObj = new URL(url, window.location.origin);
-      urlObj.searchParams.set("expo", "true");
       window.location.href = urlObj.toString();
     } else {
       window.location.href = url;
