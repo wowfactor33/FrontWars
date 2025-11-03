@@ -14,19 +14,15 @@
     0 8px 20px rgba(255, 107, 107, 0.4),
     0 0 0 4px rgba(0, 0, 0, 1),
     inset 0 2px 4px rgba(255, 255, 255, 0.3);
-  transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-menu-button:active {
-  transform: scale(0.9);
-  box-shadow: 
-    0 4px 10px rgba(255, 107, 107, 0.3),
-    0 0 0 4px rgba(0, 0, 0, 1),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: scale(0.95);
 }
 
 .mobile-menu-button span {
@@ -35,8 +31,10 @@
   height: 3px;
   background: white;
   border-radius: 3px;
-  transition: all 0.3s ease;
   position: relative;
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+  transform: translate3d(0, 0, 0);
 }
 
 .mobile-menu-button span::before,
@@ -47,16 +45,19 @@
   height: 3px;
   background: white;
   border-radius: 3px;
-  transition: all 0.3s ease;
   left: 0;
+  top: 0;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform;
+  transform-origin: center;
 }
 
 .mobile-menu-button span::before {
-  top: -10px;
+  transform: translate3d(0, -10px, 0);
 }
 
 .mobile-menu-button span::after {
-  bottom: -10px;
+  transform: translate3d(0, 10px, 0);
 }
 
 .mobile-menu-button.active span {
@@ -64,34 +65,37 @@
 }
 
 .mobile-menu-button.active span::before {
-  top: 0;
-  transform: rotate(45deg);
+  transform: translate3d(0, 0, 0) rotate(45deg);
 }
 
 .mobile-menu-button.active span::after {
-  bottom: 0;
-  transform: rotate(-45deg);
+  transform: translate3d(0, 0, 0) rotate(-45deg);
 }
 
 .mobile-sidebar {
   position: fixed;
-  right: -100%;
+  right: 0;
   top: 0;
   width: 85%;
   max-width: 440px;
   height: 100vh;
   background: linear-gradient(180deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   z-index: 9998;
-  transition: right 0.2s ease-in;
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: -5px 0 30px rgba(0, 0, 0, 0.5);
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 80px 20px 20px;
   display: flex;
   flex-direction: column;
+  will-change: transform;
+  transform: translate3d(100%, 0, 0);
+  -webkit-overflow-scrolling: touch;
+  contain: layout style paint;
 }
 
 .mobile-sidebar.active {
-  right: 0;
+  transform: translate3d(0, 0, 0);
 }
 
 .mobile-sidebar-overlay {
@@ -104,13 +108,16 @@
   z-index: 9997;
   opacity: 0;
   visibility: hidden;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
+  transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity;
+  pointer-events: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .mobile-sidebar-overlay.active {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .mobile-menu-item {
@@ -123,32 +130,25 @@
   text-align: left;
   cursor: pointer;
   position: relative;
-  overflow: hidden;
   color: white;
   border: 4px solid rgb(0, 0, 0);
-  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   box-shadow: 
     0 6px 15px rgba(0, 0, 0, 0.3),
     inset 0 1px 2px rgba(255, 255, 255, 0.1);
   display: flex;
   align-items: center;
   gap: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
-.mobile-menu-item::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.mobile-menu-item:hover::before,
-.mobile-menu-item:active::before {
-  left: 100%;
+.mobile-menu-item:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15);
 }
 
 /* Fancy button styles - Primary */
@@ -159,11 +159,14 @@
     inset 0 2px 4px rgba(255, 255, 255, 0.2);
 }
 
-.mobile-menu-item.primary:active {
-  transform: translateY(2px) scale(0.98);
+.mobile-menu-item.primary:hover {
   box-shadow: 
-    0 4px 10px rgba(102, 126, 234, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    0 10px 25px rgba(102, 126, 234, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
+.mobile-menu-item.primary:active {
+  transform: scale(0.95);
 }
 
 /* Fancy button styles - Success */
@@ -174,59 +177,14 @@
     inset 0 2px 4px rgba(255, 255, 255, 0.2);
 }
 
+.mobile-menu-item.success:hover {
+  box-shadow: 
+    0 10px 25px rgba(17, 153, 142, 0.5),
+    inset 0 2px 4px rgba(255, 255, 255, 0.2);
+}
+
 .mobile-menu-item.success:active {
-  transform: translateY(2px) scale(0.98);
-  box-shadow: 
-    0 4px 10px rgba(17, 153, 142, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Fancy button styles - Warning */
-.mobile-menu-item.warning {
-  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-  box-shadow: 
-    0 8px 20px rgba(245, 87, 108, 0.4),
-    inset 0 2px 4px rgba(255, 255, 255, 0.2),
-    0 0 0 2px rgba(255, 255, 255, 0.1);
-}
-
-.mobile-menu-item.warning:active {
-  transform: translateY(2px) scale(0.98);
-  box-shadow: 
-    0 4px 10px rgba(245, 87, 108, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Fancy button styles - Info */
-.mobile-menu-item.info {
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-  box-shadow: 
-    0 8px 20px rgba(79, 172, 254, 0.4),
-    inset 0 2px 4px rgba(255, 255, 255, 0.2),
-    0 0 0 2px rgba(255, 255, 255, 0.1);
-}
-
-.mobile-menu-item.info:active {
-  transform: translateY(2px) scale(0.98);
-  box-shadow: 
-    0 4px 10px rgba(79, 172, 254, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Fancy button styles - Fun */
-.mobile-menu-item.fun {
-  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-  box-shadow: 
-    0 8px 20px rgba(250, 112, 154, 0.4),
-    inset 0 2px 4px rgba(255, 255, 255, 0.2),
-    0 0 0 2px rgba(255, 255, 255, 0.1);
-}
-
-.mobile-menu-item.fun:active {
-  transform: translateY(2px) scale(0.98);
-  box-shadow: 
-    0 4px 10px rgba(250, 112, 154, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  transform: scale(0.95);
 }
 
 .mobile-menu-item-icon {
@@ -255,8 +213,9 @@
   font-size: 16px;
   padding: 8px 12px;
   border-radius: 8px;
-  transition: all 0.2s ease;
   text-align: center;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .mobile-footer-link:hover {
@@ -297,6 +256,10 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     inset 0 -1px 0 rgba(0, 0, 0, 0.2);
   animation: gradient-shift-discord 3s ease infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  will-change: background-position;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 @keyframes gradient-shift-discord {
@@ -308,33 +271,23 @@
   }
 }
 
-.c-button--discord:hover {
-  background: linear-gradient(135deg, #4752C4 0%, #3c45a5 50%, #4752C4 100%);
-  background-size: 200% 200%;
-  box-shadow: 
-    0 6px 20px rgba(88, 101, 242, 0.6),
-    0 12px 35px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-    0 0 20px rgba(88, 101, 242, 0.5);
-  animation: gradient-shift-discord-fast 1.5s ease infinite;
+/* Pause animations when sidebar is closed for performance */
+.mobile-sidebar:not(.active) ~ * .c-button--discord,
+.mobile-sidebar:not(.active) .c-button--discord {
+  animation: none;
 }
 
-@keyframes gradient-shift-discord-fast {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+.c-button--discord:hover {
+  transform: scale(1.02);
+  background: linear-gradient(135deg, #7289DA 0%, #5B6EFF 50%, #7289DA 100%);
+  background-size: 200% 200%;
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15);
 }
 
 .c-button--discord:active {
-  background: linear-gradient(135deg, #3c45a5 0%, #2f3575 50%, #3c45a5 100%);
-  box-shadow: 
-    0 2px 10px rgba(88, 101, 242, 0.4),
-    0 4px 15px rgba(0, 0, 0, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  transform: scale(0.95);
 }
 
 .c-button--discord:focus {
@@ -358,6 +311,10 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.3),
     inset 0 -1px 0 rgba(0, 0, 0, 0.2);
   animation: gradient-shift-reddit 3s ease infinite;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+  will-change: background-position;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 @keyframes gradient-shift-reddit {
@@ -369,33 +326,22 @@
   }
 }
 
-.c-button--reddit:hover {
-  background: linear-gradient(135deg, #FF5700 0%, #e63e00 50%, #FF5700 100%);
-  background-size: 200% 200%;
-  box-shadow: 
-    0 6px 20px rgba(255, 69, 0, 0.6),
-    0 12px 35px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.4),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-    0 0 20px rgba(255, 69, 0, 0.5);
-  animation: gradient-shift-reddit-fast 1.5s ease infinite;
+/* Pause animations when sidebar is closed for performance */
+.mobile-sidebar:not(.active) ~ * .c-button--reddit,
+.mobile-sidebar:not(.active) .c-button--reddit {
+  animation: none;
 }
 
-@keyframes gradient-shift-reddit-fast {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+.c-button--reddit:hover {
+  transform: scale(1.02);
+  filter: brightness(1.1);
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    inset 0 1px 2px rgba(255, 255, 255, 0.15);
 }
 
 .c-button--reddit:active {
-  background: linear-gradient(135deg, #e63e00 0%, #cc3600 50%, #e63e00 100%);
-  box-shadow: 
-    0 2px 10px rgba(255, 69, 0, 0.4),
-    0 4px 15px rgba(0, 0, 0, 0.3),
-    inset 0 2px 4px rgba(0, 0, 0, 0.3);
+  transform: scale(0.95);
 }
 
 .c-button--reddit:focus {

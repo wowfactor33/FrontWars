@@ -312,51 +312,100 @@
         });
       });
 
-      // Mobile Menu Toggle
+      // Mobile Menu Toggle - Optimized for performance
       (function() {
         const menuButton = document.getElementById('mobile-menu-button');
         const sidebar = document.getElementById('mobile-sidebar');
         const overlay = document.getElementById('mobile-sidebar-overlay');
         
+        // Cache DOM queries
+        let closeMenuHandlers = null;
+        let zIndexTimeout = null;
+        
         function toggleMenu() {
           const isActive = sidebar.classList.contains('active');
-          sidebar.classList.toggle('active');
-          overlay.classList.toggle('active');
-          menuButton.classList.toggle('active');
-          if (isActive) {
-            setTimeout(() => {
-              menuButton.style.zIndex = '0';
-            }, 200);
-          } else {
-            menuButton.style.zIndex = '9999';
+          
+          // Clear any pending zIndex timeout to prevent race conditions
+          if (zIndexTimeout !== null) {
+            clearTimeout(zIndexTimeout);
+            zIndexTimeout = null;
           }
+          
+          // Use requestAnimationFrame for smoother animations
+          requestAnimationFrame(() => {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            menuButton.classList.toggle('active');
+            
+            if (isActive) {
+              // Clean up after animation
+              zIndexTimeout = setTimeout(() => {
+                menuButton.style.zIndex = '0';
+                zIndexTimeout = null;
+              }, 200);
+            } else {
+              menuButton.style.zIndex = '9999';
+              // Setup close handlers only when menu opens
+              setupCloseHandlers();
+            }
+          });
         }
         
         function closeMenu() {
-          sidebar.classList.remove('active');
-          overlay.classList.remove('active');
-          menuButton.classList.remove('active');
-          setTimeout(() => {
-            menuButton.style.zIndex = '0';
-          }, 200);
+          // Clear any pending zIndex timeout to prevent race conditions
+          if (zIndexTimeout !== null) {
+            clearTimeout(zIndexTimeout);
+            zIndexTimeout = null;
+          }
+          
+          requestAnimationFrame(() => {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+            menuButton.classList.remove('active');
+            
+            zIndexTimeout = setTimeout(() => {
+              menuButton.style.zIndex = '0';
+              zIndexTimeout = null;
+            }, 200);
+            
+            // Clean up handlers when menu closes
+            cleanupCloseHandlers();
+          });
         }
         
-        menuButton.addEventListener('click', toggleMenu);
-        overlay.addEventListener('click', closeMenu);
+        function setupCloseHandlers() {
+          // Only setup handlers once
+          if (closeMenuHandlers !== null) return;
+          
+          // Use event delegation for better performance
+          closeMenuHandlers = (e) => {
+            const target = e.target;
+            if (target.closest('.mobile-menu-item, lang-selector, .mobile-footer-link, .mobile-social-buttons .c-button')) {
+              closeMenu();
+            }
+          };
+          
+          sidebar.addEventListener('click', closeMenuHandlers, { passive: true });
+        }
+        
+        function cleanupCloseHandlers() {
+          if (closeMenuHandlers) {
+            sidebar.removeEventListener('click', closeMenuHandlers);
+            closeMenuHandlers = null;
+          }
+        }
+        
+        // Use passive listeners for better scroll performance
+        menuButton.addEventListener('click', toggleMenu, { passive: true });
+        overlay.addEventListener('click', closeMenu, { passive: true });
         
         // Close on escape key
-        document.addEventListener('keydown', function(e) {
+        const escapeHandler = (e) => {
           if (e.key === 'Escape' && sidebar.classList.contains('active')) {
             closeMenu();
           }
-        });
-
-        // Close menu when a menu item, lang-selector, footer link, or social button is clicked
-        document.querySelectorAll('.mobile-menu-item, lang-selector, .mobile-footer-link, .mobile-social-buttons .c-button').forEach(item => {
-          item.addEventListener('click', () => {
-            closeMenu();
-          });
-        });
+        };
+        document.addEventListener('keydown', escapeHandler, { passive: true });
       })();
     </script>
   </body>
