@@ -1,5 +1,3 @@
-import { AdProvider } from "./AdProvider";
-
 declare global {
   interface Window {
     CrazyGames: {

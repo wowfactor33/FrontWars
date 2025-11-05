@@ -13,6 +13,7 @@ import {
   patternRelationship,
 } from "./Cosmetics";
 import { translateText } from "./Utils";
+import { AdProvider } from "./AdProvider";
 
 @customElement("territory-patterns-modal")
 export class TerritoryPatternsModal extends LitElement {
@@ -262,9 +263,10 @@ export class TerritoryPatternsModal extends LitElement {
   }
 
   public async refresh() {
+    const size = AdProvider.isMobile ? 60 : 50;
     const preview = this.selectedColor
-      ? this.renderColorPreview(this.selectedColor, 60, 60)
-      : renderPatternPreview(this.selectedPattern ?? null, 60, 60);
+      ? this.renderColorPreview(this.selectedColor, size, size)
+      : renderPatternPreview(this.selectedPattern ?? null, size, size);
     this.requestUpdate();
 
     // Wait for the DOM to be updated and the o-modal element to be available

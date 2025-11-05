@@ -88,10 +88,10 @@ class AdProviderManager {
 	async refreshBanners(): Promise<void> {
 		console.log("refresh banners")
 		if (this.isCrazyGames) {
+			// TODO: Refresh only the banners that are visible
 			void CrazySDK.requestResponsiveBanner("cg-banner-left");
 			void CrazySDK.requestResponsiveBanner("cg-banner-right");
-			// Bottom banner may be disabled in markup, safe to request
-			// void CrazySDK.requestResponsiveBanner("cg-banner-bottom");
+			void CrazySDK.requestResponsiveBanner("cg-banner-ingame");
 			return;
 		}
 

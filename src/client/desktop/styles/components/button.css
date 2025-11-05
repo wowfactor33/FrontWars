@@ -84,11 +84,25 @@
 }
 
 .b-button {
-  outline: none;
+  border: 1px solid;
+  border-color: rgb(209, 213, 219);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  transition: var(--transition);
+  padding: 4px;
+  border-radius: 0.5rem;
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 .b-button:focus {
   outline: none;
+  box-shadow: 0 0 0 2px rgb(124, 58, 237);
+  border-color: rgb(124, 58, 237);
+}
+
+.dark .b-button {
+  background-color: rgba(76, 29, 149, 0.8);
+  color: rgb(255, 255, 255);
+  border-color: rgba(209, 213, 219, 0.5);
 }
 
 .c-input {

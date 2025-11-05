@@ -1,6 +1,7 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import megaphone from "../../../resources/images/NewsIcon.png";
+import newsIcon from "../../../resources/images/NewsIcon.png";
+import megaphoneIcon from "../../../resources/images/Megaphone.svg";
 import version from "../../../resources/version.txt";
 import { NewsModal } from "../NewsModal";
 import { translateText } from "../Utils";
@@ -43,12 +44,12 @@ export class NewsButton extends LitElement {
         ${this.isActive ? "active" : ""}"
       >
         <button
-          class="b-button w-[60px] h-[60px]  flex items-center cursor-pointer"
+          class="b-button ${AdProvider.isMobile ? "w-[60px] h-[60px]" : ""} flex items-center cursor-pointer"
           @click=${this.handleClick}
         >
           <img
-            class="size-[60px]"
-            src="${megaphone}"
+            class="${AdProvider.isMobile ? "size-[60px]" : "w-[40px] h-[50px]"} dark:invert"
+            src="${AdProvider.isMobile ? newsIcon : megaphoneIcon}"
             alt=${translateText("news.title")}
           />
         </button>
