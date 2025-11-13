@@ -108,6 +108,10 @@ export class CenterCameraEvent implements GameEvent {
   constructor() {}
 }
 
+export class FocusCameraEvent implements GameEvent {
+  constructor() {}
+}
+
 export class AutoUpgradeEvent implements GameEvent {
   constructor(
     public readonly x: number,
@@ -134,8 +138,15 @@ export class InputHandler {
   private activeKeys = new Set<string>();
   private keybinds: Record<string, string> = {};
 
+  private middleMouseDown: boolean = false;
+  private middleMouseHoldTimeout: NodeJS.Timeout | null = null;
+  private middleMouseRepeatInterval: NodeJS.Timeout | null = null;
+  private lastMiddleMousePosition: { x: number; y: number } | null = null;
+
   private readonly PAN_SPEED = 5;
   private readonly ZOOM_SPEED = 10;
+  private readonly MIDDLE_MOUSE_MACRO_DELAY_MS = 300;
+  private middleMouseMacroFrequencyMs: number = 0; // sets later in setMacroCooldown from ClientGameRunner
 
   private readonly userSettings: UserSettings = new UserSettings();
 
@@ -217,6 +228,10 @@ export class InputHandler {
     window.addEventListener("mousemove", (e) => {
       if (e.movementX || e.movementY) {
         this.eventBus.emit(new MouseMoveEvent(e.clientX, e.clientY));
+      }
+      // Track mouse position during middle mouse hold for macro
+      if (this.middleMouseDown) {
+        this.lastMiddleMousePosition = { x: e.clientX, y: e.clientY };
       }
     });
     this.pointers.clear();
@@ -419,6 +434,36 @@ export class InputHandler {
     if (event.button === 1) {
       event.preventDefault();
       this.eventBus.emit(new AutoUpgradeEvent(event.clientX, event.clientY));
+
+      this.middleMouseDown = true;
+      this.lastMiddleMousePosition = { x: event.clientX, y: event.clientY };
+      
+      // Start timer: after delay, begin sending AutoUpgradeEvent at frequency
+      this.middleMouseHoldTimeout = setTimeout(() => {
+        if (this.middleMouseDown && this.lastMiddleMousePosition) {
+          // Emit first event immediately when hold threshold is reached
+          this.eventBus.emit(
+            new AutoUpgradeEvent(
+              this.lastMiddleMousePosition.x,
+              this.lastMiddleMousePosition.y,
+            ),
+          );
+          
+          // Then start repeating at specified frequency
+          this.middleMouseRepeatInterval = setInterval(() => {
+            if (this.middleMouseDown && this.lastMiddleMousePosition) {
+              this.eventBus.emit(
+                new AutoUpgradeEvent(
+                  this.lastMiddleMousePosition.x,
+                  this.lastMiddleMousePosition.y,
+                ),
+              );
+            } else {
+              this.cleanupMiddleMouseMacro();
+            }
+          }, this.middleMouseMacroFrequencyMs);
+        }
+      }, this.MIDDLE_MOUSE_MACRO_DELAY_MS);
       return;
     }
 
@@ -445,6 +490,7 @@ export class InputHandler {
   onPointerUp(event: PointerEvent) {
     if (event.button === 1) {
       event.preventDefault();
+      this.cleanupMiddleMouseMacro();
       return;
     }
 
@@ -500,7 +546,10 @@ export class InputHandler {
   }
 
   private onPointerMove(event: PointerEvent) {
-    if (event.button === 1) {
+    if (event.button === 1 || this.middleMouseDown) {
+      if (this.middleMouseDown) {
+        this.lastMiddleMousePosition = { x: event.clientX, y: event.clientY };
+      }
       event.preventDefault();
       return;
     }
@@ -562,10 +611,28 @@ export class InputHandler {
     };
   }
 
+  public setMacroCooldown(cooldownMs: number): void {
+    this.middleMouseMacroFrequencyMs = cooldownMs;
+  }
+
+  private cleanupMiddleMouseMacro() {
+    this.middleMouseDown = false;
+    if (this.middleMouseHoldTimeout !== null) {
+      clearTimeout(this.middleMouseHoldTimeout);
+      this.middleMouseHoldTimeout = null;
+    }
+    if (this.middleMouseRepeatInterval !== null) {
+      clearInterval(this.middleMouseRepeatInterval);
+      this.middleMouseRepeatInterval = null;
+    }
+    this.lastMiddleMousePosition = null;
+  }
+
   destroy() {
     if (this.moveInterval !== null) {
       clearInterval(this.moveInterval);
     }
+    this.cleanupMiddleMouseMacro();
     this.activeKeys.clear();
   }
 

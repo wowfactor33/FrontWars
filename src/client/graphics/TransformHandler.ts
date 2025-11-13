@@ -1,7 +1,7 @@
 import { EventBus } from "../../core/EventBus";
 import { Cell } from "../../core/game/Game";
 import { GameView } from "../../core/game/GameView";
-import { CenterCameraEvent, DragEvent, ZoomEvent } from "../InputHandler";
+import { CenterCameraEvent, DragEvent, FocusCameraEvent, ZoomEvent } from "../InputHandler";
 import {
   GoToPlayerEvent,
   GoToPositionEvent,
@@ -20,6 +20,7 @@ export class TransformHandler {
   private lastGoToCallTime: number | null = null;
 
   private target: Cell | null;
+  private targetScale: number | null = null;
   private intervalID: NodeJS.Timeout | null = null;
   private changed = false;
 
@@ -35,6 +36,7 @@ export class TransformHandler {
     this.eventBus.on(GoToPositionEvent, (e) => this.onGoToPosition(e));
     this.eventBus.on(GoToUnitEvent, (e) => this.onGoToUnit(e));
     this.eventBus.on(CenterCameraEvent, () => this.centerCamera());
+    this.eventBus.on(FocusCameraEvent, () => this.focusOn());
   }
 
   public updateCanvasBoundingRect() {
@@ -191,6 +193,16 @@ export class TransformHandler {
     this.intervalID = setInterval(() => this.goTo(), GOTO_INTERVAL_MS);
   }
 
+  focusOn() {
+    this.clearTarget();
+    const player = this.game.myPlayer();
+    if (!player || !player.nameLocation()) return;
+    
+    this.target = new Cell(player.nameLocation().x, player.nameLocation().y);
+    this.targetScale = 5;
+    this.intervalID = setInterval(() => this.focusTo(), GOTO_INTERVAL_MS);
+  }
+
   private goTo() {
     const { screenX, screenY } = this.screenCenter();
 
@@ -223,6 +235,84 @@ export class TransformHandler {
       Math.min((this.target.y - screenY) * r, CAMERA_MAX_SPEED),
       -CAMERA_MAX_SPEED,
     );
+
+    this.changed = true;
+  }
+
+  private focusTo() {
+    const { screenX, screenY } = this.screenCenter();
+
+    if (this.target === null) throw new Error("null target");
+
+    let dt: number;
+    const now = window.performance.now();
+    if (this.lastGoToCallTime === null) {
+      dt = GOTO_INTERVAL_MS;
+    } else {
+      dt = now - this.lastGoToCallTime;
+    }
+    this.lastGoToCallTime = now;
+
+    const r = 1 - Math.pow(CAMERA_SMOOTHING, dt / 1000);
+
+    // Smoothly move camera position
+    const posReached =
+      Math.abs(this.target.x - screenX) + Math.abs(this.target.y - screenY) < 2;
+
+    if (!posReached) {
+      this.offsetX += Math.max(
+        Math.min((this.target.x - screenX) * r, CAMERA_MAX_SPEED),
+        -CAMERA_MAX_SPEED,
+      );
+      this.offsetY += Math.max(
+        Math.min((this.target.y - screenY) * r, CAMERA_MAX_SPEED),
+        -CAMERA_MAX_SPEED,
+      );
+    }
+
+    // Smoothly zoom in
+    if (this.targetScale !== null) {
+      const scaleDiff = this.targetScale - this.scale;
+      const scaleReached = Math.abs(scaleDiff) < 0.01;
+
+      if (!scaleReached) {
+        const oldScale = this.scale;
+        this.scale += scaleDiff * r;
+
+        // Clamp the scale
+        this.scale = Math.max(0.2, Math.min(20, this.scale));
+
+        // Adjust offset to maintain zoom point at canvas center
+        // (which will be at target position once camera is centered)
+        const canvasRect = this.boundingRect();
+        const canvasX = canvasRect.width / 2;
+        const canvasY = canvasRect.height / 2;
+
+        // Calculate the zoom point in offset coordinates (before zoom)
+        const zoomPointX =
+          (canvasX - this.game.width() / 2) / oldScale + this.offsetX;
+        const zoomPointY =
+          (canvasY - this.game.height() / 2) / oldScale + this.offsetY;
+
+        // Adjust the offset to keep the zoom point fixed
+        this.offsetX =
+          zoomPointX - (canvasX - this.game.width() / 2) / this.scale;
+        this.offsetY =
+          zoomPointY - (canvasY - this.game.height() / 2) / this.scale;
+      }
+
+      // If both position and zoom are reached, clear the target
+      if (posReached && scaleReached) {
+        this.clearTarget();
+        return;
+      }
+    } else {
+      // If no target scale, just check position
+      if (posReached) {
+        this.clearTarget();
+        return;
+      }
+    }
 
     this.changed = true;
   }
@@ -265,6 +355,8 @@ export class TransformHandler {
       this.intervalID = null;
     }
     this.target = null;
+    this.targetScale = null;
+    this.lastGoToCallTime = null;
   }
 
   override(x: number = 0, y: number = 0, s: number = 1) {
@@ -273,6 +365,11 @@ export class TransformHandler {
     this.offsetX = x;
     this.offsetY = y;
     this.scale = s;
+    this.changed = true;
+  }
+
+  setScale(scale: number) {
+    this.scale = Math.max(0.2, Math.min(20, scale));
     this.changed = true;
   }
 

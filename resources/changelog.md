@@ -1,3 +1,29 @@
+## 📦 FrontWars v25.5
+
+🎨 **New Patterns**
+
+- Added 5 new territory patterns for more customization options
+
+⚡ **Fast Mode Macro**
+
+- New macro feature for Fast Mode enthusiasts! Hold the middle mouse button to quickly upgrade your infrastructure
+
+📍 **Auto-Spawn**
+
+- Added automatic spawn point at game start
+- Never lose track of your starting position - always know where you are when the game begins
+- Perfect for when you forget to place a spawn point or lose yourself on the map
+
+🔧 **Bug Fixes & Improvements**
+
+- Fixed bug where flags were not displaying in multiplayer (thanks to @Zeklum)
+
+---
+
+*Small update before a major global update! Stay tuned*
+
+---
+
 ## 📦 FrontWars v25.4
 
 🗺️ **New Map! — Game of Thrones**

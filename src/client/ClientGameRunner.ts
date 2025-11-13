@@ -30,6 +30,7 @@ import {
   AutoUpgradeEvent,
   DoBoatAttackEvent,
   DoGroundAttackEvent,
+  FocusCameraEvent,
   InputHandler,
   MouseMoveEvent,
   MouseUpEvent,
@@ -201,7 +202,7 @@ export class ClientGameRunner {
 
   private lastMessageTime: number = 0;
   private connectionCheckInterval: NodeJS.Timeout | null = null;
-
+  private hasCenteredCamera = false;
   constructor(
     private lobby: LobbyConfig,
     private eventBus: EventBus,
@@ -212,10 +213,10 @@ export class ClientGameRunner {
     private gameView: GameView,
   ) {
     this.lastMessageTime = Date.now();
-    // Set upgrade cooldown from config (in milliseconds)
+    // Set cooldowns from config (in milliseconds)
     const cooldownTicks = this.gameView.config().upgradeCooldownTicks();
     const cooldownMs = cooldownTicks * 100; // 100ms per tick
-    this.transport.setUpgradeCooldown(cooldownMs);
+    this.input.setMacroCooldown(cooldownMs);
   }
 
   private saveGame(update: WinUpdate) {
@@ -294,6 +295,13 @@ export class ClientGameRunner {
         this.eventBus.emit(new SendHashEvent(hu.tick, hu.hash));
       });
       this.gameView.update(gu);
+      
+      // Focus camera once after spawn phase ends
+      if (!this.gameView.inSpawnPhase() && !this.hasCenteredCamera) {
+        this.eventBus.emit(new FocusCameraEvent());
+        this.hasCenteredCamera = true;
+      }
+
       this.renderer.tick();
 
       if (gu.updates[GameUpdateType.Win].length > 0) {
