@@ -1,4 +1,4 @@
-import { GameConfig, GameID, PartialGameRecord } from "../core/schemas";
+import { GameConfig, GameID, PartialGameRecord } from "../core/Schemas";
 import { replacer } from "../core/Util";
 
 export interface LocalStatsData {

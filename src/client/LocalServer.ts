@@ -10,7 +10,7 @@ import {
   ServerMessage,
   ServerStartGameMessage,
   Turn,
-} from "../core/schemas";
+} from "../core/Schemas";
 import {
   createPartialGameRecord,
   decompressGameRecord,

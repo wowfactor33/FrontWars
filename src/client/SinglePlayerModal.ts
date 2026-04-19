@@ -16,7 +16,7 @@ import {
   mapCategories,
 } from "../core/game/Game";
 import { UserSettings } from "../core/game/UserSettings";
-import { TeamCountConfig } from "../core/schemas";
+import { TeamCountConfig } from "../core/Schemas";
 import { generateID } from "../core/Util";
 import "./components/baseComponents/Button";
 import "./components/baseComponents/Modal";

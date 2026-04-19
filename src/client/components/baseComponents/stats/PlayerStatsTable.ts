@@ -5,7 +5,7 @@ import {
   boatUnits,
   bombUnits,
   otherUnits,
-} from "../../../../core/schemas/stats";
+} from "../../../../core/StatsSchemas";
 import { renderNumber, translateText } from "../../../Utils";
 
 @customElement("player-stats-table")

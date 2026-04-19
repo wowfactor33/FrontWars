@@ -22,7 +22,7 @@ import {
   ServerMessage,
   ServerMessageSchema,
   Winner,
-} from "../core/schemas";
+} from "../core/Schemas";
 import { replacer } from "../core/Util";
 import { LobbyConfig } from "./ClientGameRunner";
 import { LocalServer } from "./LocalServer";

@@ -8,7 +8,7 @@ import {
   PlayerCosmeticRefs,
   PlayerRecord,
   ServerMessage,
-} from "../core/schemas";
+} from "../core/Schemas";
 import { createPartialGameRecord, replacer } from "../core/Util";
 import { ServerConfig } from "../core/configuration/Config";
 import { getConfig } from "../core/configuration/ConfigLoader";
