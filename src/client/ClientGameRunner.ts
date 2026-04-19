@@ -112,7 +112,20 @@ export function joinLobby(
         userSettings,
         terrainLoad,
         terrainMapFileLoader,
-      ).then((r) => r.start());
+      )
+        .then((r) => r.start())
+        .catch((error: unknown) => {
+          console.error("Failed to create client game", error);
+          showErrorModal(
+            error instanceof Error ? error.message : String(error),
+            "",
+            lobbyConfig.gameID,
+            lobbyConfig.clientID,
+            true,
+            false,
+            "error_modal.connection_error",
+          );
+        });
     }
     if (message.type === "error") {
       showErrorModal(
