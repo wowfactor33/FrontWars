@@ -2,7 +2,9 @@ import {
   AllPlayers,
   Difficulty,
   Duos,
+  GameEconomyMode,
   GameMapType,
+  GameMapSize,
   GameMode,
   GameType,
   PlayerType,
@@ -21,6 +23,23 @@ import { z } from "zod";
 
 export type GameID = string;
 export type ClientID = string;
+export { ID } from "./BaseSchemas";
+export type PlayerCosmeticRefs = {
+  color?: string;
+  flag?: string;
+  patternColorPaletteName?: string;
+  patternName?: string;
+};
+export type PlayerPattern = {
+  colorPalette?: {
+    isArchived?: boolean;
+    name: string;
+    primary?: string;
+    secondary?: string;
+  };
+  name: string;
+  patternData: string;
+};
 
 export type Intent =
   | SpawnIntent
@@ -140,7 +159,9 @@ export const GameConfigSchema = z.object({
   disabledUnits: z.enum(UnitType).array().optional(),
   donateGold: z.boolean(),
   donateTroops: z.boolean(),
+  economyMode: z.nativeEnum(GameEconomyMode).optional(),
   gameMap: z.enum(GameMapType),
+  gameMapSize: z.nativeEnum(GameMapSize).optional(),
   gameMode: z.enum(GameMode),
   gameType: z.enum(GameType),
   infiniteGold: z.boolean(),
@@ -148,6 +169,7 @@ export const GameConfigSchema = z.object({
   instantBuild: z.boolean(),
   maxPlayers: z.number().optional(),
   playerTeams: TeamCountConfigSchema.optional(),
+  realismMode: z.boolean().optional(),
 });
 
 export const TeamSchema = z.string();
@@ -442,6 +464,7 @@ export const ServerPingMessageSchema = z.object({
 
 export const ServerPrestartMessageSchema = z.object({
   gameMap: z.nativeEnum(GameMapType),
+  gameMapSize: z.nativeEnum(GameMapSize).optional(),
   type: z.literal("prestart"),
 });
 
@@ -563,3 +586,4 @@ export const GameRecordSchema = AnalyticsRecordSchema.extend({
   turns: TurnSchema.array(),
 });
 export type GameRecord = z.infer<typeof GameRecordSchema>;
+export const PartialGameRecordSchema = GameRecordSchema;

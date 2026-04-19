@@ -1,6 +1,5 @@
 import { LitElement, html } from "lit";
 import { customElement, property, state } from "lit/decorators.js";
-import newsIcon from "../../../resources/images/NewsIcon.png";
 import megaphoneIcon from "../../../resources/images/Megaphone.svg";
 import version from "../../../resources/version.txt";
 import { NewsModal } from "../NewsModal";
@@ -49,7 +48,7 @@ export class NewsButton extends LitElement {
         >
           <img
             class="${AdProvider.isMobile ? "size-[60px]" : "w-[40px] h-[50px]"} dark:invert"
-            src="${AdProvider.isMobile ? newsIcon : megaphoneIcon}"
+            src="${megaphoneIcon}"
             alt=${translateText("news.title")}
           />
         </button>

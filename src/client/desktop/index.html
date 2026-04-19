@@ -1,20 +1,28 @@
 <!doctype html>
 <html lang="en" class="h-full">
   <head>
-<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
-<script>
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.init({
-      appId: "7f91717f-cc84-452e-839f-78ac998fff54",
-    });
-  });
-</script>
+    <script
+      src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js"
+      defer
+    ></script>
+    <script>
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function (OneSignal) {
+        await OneSignal.init({
+          appId: "7f91717f-cc84-452e-839f-78ac998fff54",
+        });
+      });
+    </script>
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F5P8MBF1TZ"></script>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-F5P8MBF1TZ"
+    ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
+      function gtag() {
+        dataLayer.push(arguments);
+      }
       gtag("js", new Date());
       gtag("config", "G-F5P8MBF1TZ");
     </script>
@@ -24,11 +32,11 @@
       content="width=device-width, initial-scale=1.0, user-scalable=no"
     />
     <title>FrontWars</title>
-    <link rel="manifest" href="/resources/manifest.json" />
+    <link rel="manifest" href="../../../resources/manifest.json" />
     <link
       rel="icon"
       type="image/x-icon"
-      href="/resources/images/Favicon.svg"
+      href="../../../resources/images/Favicon.svg"
     />
 
     <!-- SEO -->
@@ -47,7 +55,7 @@
     />
     <meta
       property="og:image"
-      content="https://frontwars.io/resources/images/GameplayScreenshot.png"
+      content="https://frontwars.io/images/GameplayScreenshot.png"
     />
     <meta property="og:type" content="game" />
 
@@ -92,16 +100,19 @@
         left: 0;
         width: 100%;
         height: 100%;
-        filter: blur(4px) brightness(0.65) saturate(1.2) contrast(1.15) hue-rotate(-15deg);
+        filter: blur(4px) brightness(0.65) saturate(1.2) contrast(1.15)
+          hue-rotate(-15deg);
         z-index: -1;
       }
 
       .dark .bg-image {
-        filter: blur(4px) brightness(0.4) saturate(0.9) contrast(1.2) hue-rotate(-15deg);
+        filter: blur(4px) brightness(0.4) saturate(0.9) contrast(1.2)
+          hue-rotate(-15deg);
       }
 
       .halloween .bg-image {
-        filter: blur(3px) brightness(0.35) saturate(0.7) contrast(1.4) sepia(0.15) hue-rotate(300deg);
+        filter: blur(3px) brightness(0.35) saturate(0.7) contrast(1.4)
+          sepia(0.15) hue-rotate(300deg);
       }
 
       /* display:none if child has class parent-hidden since we can't use shadow DOM in Lit due to Tailwind */
@@ -135,7 +146,19 @@
     </script>
 
     <!-- NitroPay ads are loaded dynamically via NitroPaySDK -->
-    <script data-cfasync="false">window.nitroAds=window.nitroAds||{createAd:function(){return new Promise(e=>{window.nitroAds.queue.push(["createAd",arguments,e])})},addUserToken:function(){window.nitroAds.queue.push(["addUserToken",arguments])},queue:[]};</script>
+    <script data-cfasync="false">
+      window.nitroAds = window.nitroAds || {
+        createAd: function () {
+          return new Promise((e) => {
+            window.nitroAds.queue.push(["createAd", arguments, e]);
+          });
+        },
+        addUserToken: function () {
+          window.nitroAds.queue.push(["addUserToken", arguments]);
+        },
+        queue: [],
+      };
+    </script>
   </head>
 
   <body
@@ -148,25 +171,57 @@
       <div
         class="scale-container w-full flex justify-center items-center gap-6"
       >
-
         <!-- Ad banner left -->
-        <div
-          id="ad-banner-left"
-          class="ad"
-          style="width: 300px; height: 600px"
-        >
-        <!-- CrazyGames -->
-          <div id="cg-banner-left" class="ad" style="width: 300px; height: 600px; display: none;"></div>
+        <div id="ad-banner-left" class="ad" style="width: 300px; height: 600px">
+          <!-- CrazyGames -->
+          <div
+            id="cg-banner-left"
+            class="ad"
+            style="width: 300px; height: 600px; display: none"
+          ></div>
           <!-- NitroPay -->
-          <div id="frontwars-300x600" class="ad" style="width: 300px; height: 600px; display: none;"></div>
+          <div
+            id="frontwars-300x600"
+            class="ad"
+            style="width: 300px; height: 600px; display: none"
+          ></div>
         </div>
 
         <div class="container">
           <header class="l-header">
             <div class="l-header__content">
-              <img src="/resources/images/logo/fw.svg" alt="FrontWars Halloween Logo" class="l-header__logo">
-              <div class="halloween-pumpkin-container" style="display: none; position: absolute; top: -25px; left: 0; transform: translateX(-50%) rotate(-27deg); transform-origin: 50px 50px; width: 95px; height: 95px; pointer-events: none; z-index: 10; margin: 0; padding: 0;">
-                <img src="/resources/images/logo/dark_pumpkin.png" alt="Halloween Pumpkin" style="width: 100%; height: 100%; object-fit: contain; filter: brightness(1.1) contrast(1.2) saturate(1.1);" />
+              <img
+                src="../../../resources/images/logo/fw.svg"
+                alt="FrontWars Halloween Logo"
+                class="l-header__logo"
+              />
+              <div
+                class="halloween-pumpkin-container"
+                style="
+                  display: none;
+                  position: absolute;
+                  top: -25px;
+                  left: 0;
+                  transform: translateX(-50%) rotate(-27deg);
+                  transform-origin: 50px 50px;
+                  width: 95px;
+                  height: 95px;
+                  pointer-events: none;
+                  z-index: 10;
+                  margin: 0;
+                  padding: 0;
+                "
+              >
+                <img
+                  src="../../../resources/images/logo/dark_pumpkin.png"
+                  alt="Halloween Pumpkin"
+                  style="
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                    filter: brightness(1.1) contrast(1.2) saturate(1.1);
+                  "
+                />
               </div>
             </div>
           </header>
@@ -179,8 +234,7 @@
               title="Pick a pattern!"
             ></button>
             <username-input class="relative w-full"></username-input>
-            <news-button class="w-[80px] component-hideable"
-            ></news-button>
+            <news-button class="w-[80px] component-hideable"></news-button>
           </div>
           <div>
             <public-lobby class="block"></public-lobby>
@@ -227,11 +281,18 @@
           style="width: 300px; height: 600px"
         >
           <!-- CrazyGames -->
-          <div id="cg-banner-right" class="ad" style="width: 300px; height: 600px; display: none;"></div>
+          <div
+            id="cg-banner-right"
+            class="ad"
+            style="width: 300px; height: 600px; display: none"
+          ></div>
           <!-- NitroPay -->
-          <div id="frontwars-300x600_2" class="ad" style="width: 300px; height: 600px; display: none;"></div>
+          <div
+            id="frontwars-300x600_2"
+            class="ad"
+            style="width: 300px; height: 600px; display: none"
+          ></div>
         </div>
-
       </div>
     </main>
 
@@ -338,9 +399,21 @@
     <game-starting-modal></game-starting-modal>
     <game-top-bar></game-top-bar>
     <unit-display></unit-display>
-    <div id="game-banner" class="flex fixed top-[10px] z-[1000] w-full justify-center" style="display: none;">
-      <div id="cg-banner-ingame" class="ad" style="width: 468px; height: 60px; display: none;"></div>
-      <div id="frontwars-728x90" class="ad" style="width: 728px; display: none;"></div>
+    <div
+      id="game-banner"
+      class="flex fixed top-[10px] z-[1000] w-full justify-center"
+      style="display: none"
+    >
+      <div
+        id="cg-banner-ingame"
+        class="ad"
+        style="width: 468px; height: 60px; display: none"
+      ></div>
+      <div
+        id="frontwars-728x90"
+        class="ad"
+        style="width: 728px; display: none"
+      ></div>
     </div>
     <div class="flex fixed top-[20px] right-0 z-[1000] items-start gap-2">
       <replay-panel></replay-panel>

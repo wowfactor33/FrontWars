@@ -25,6 +25,7 @@ import { JWK } from "jose";
 import { NukeType } from "../StatsSchemas";
 import { PastelTheme } from "./PastelTheme";
 import { PastelThemeDark } from "./PastelThemeDark";
+import { countryEconomyForName } from "../game/Geopolitics";
 import { PlayerView } from "../game/GameView";
 import { TileRef } from "../game/GameMap";
 import { UserSettings } from "../game/UserSettings";
@@ -714,22 +715,34 @@ export class DefaultConfig implements Config {
   }
 
   startManpower(playerInfo: PlayerInfo): number {
+    const { manpowerMultiplier } = countryEconomyForName(playerInfo.name);
+
     if (playerInfo.playerType === PlayerType.Bot) {
-      return 10_000;
+      return Math.floor(10_000 * manpowerMultiplier);
     }
     if (playerInfo.playerType === PlayerType.FakeHuman) {
       switch (this._gameConfig.difficulty) {
         case Difficulty.Easy:
-          return 2_500 * (playerInfo?.nation?.strength ?? 1);
+          return Math.floor(
+            2_500 * (playerInfo?.nation?.strength ?? 1) * manpowerMultiplier,
+          );
         case Difficulty.Medium:
-          return 5_000 * (playerInfo?.nation?.strength ?? 1);
+          return Math.floor(
+            5_000 * (playerInfo?.nation?.strength ?? 1) * manpowerMultiplier,
+          );
         case Difficulty.Hard:
-          return 20_000 * (playerInfo?.nation?.strength ?? 1);
+          return Math.floor(
+            20_000 * (playerInfo?.nation?.strength ?? 1) * manpowerMultiplier,
+          );
         case Difficulty.Impossible:
-          return 50_000 * (playerInfo?.nation?.strength ?? 1);
+          return Math.floor(
+            50_000 * (playerInfo?.nation?.strength ?? 1) * manpowerMultiplier,
+          );
       }
     }
-    return this.infiniteTroops() ? 1_000_000 : 25_000;
+    return Math.floor(
+      (this.infiniteTroops() ? 1_000_000 : 25_000) * manpowerMultiplier,
+    );
   }
 
   maxTroops(player: Player | PlayerView): number {
@@ -796,7 +809,8 @@ export class DefaultConfig implements Config {
   }
 
   goldAdditionRate(player: Player): Gold {
-    return 100n;
+    const multiplier = countryEconomyForName(player.name()).goldIncomeMultiplier;
+    return BigInt(Math.max(1, Math.round(100 * multiplier)));
   }
 
   nukeMagnitudes(unitType: UnitType): NukeMagnitude {

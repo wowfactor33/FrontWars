@@ -156,6 +156,7 @@ export type PlayerUpdate = {
   isDisconnected: boolean;
   tilesOwned: number;
   gold: Gold;
+  oil: Gold;
   troops: number;
   allies: number[];
   embargoes: Set<PlayerID>;

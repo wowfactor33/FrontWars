@@ -2,9 +2,13 @@ import { Colord } from "colord";
 import { base64url } from "jose";
 import { html, LitElement, TemplateResult } from "lit";
 import { customElement, property } from "lit/decorators.js";
-import { ColorPalette, DefaultPattern, Pattern } from "../../core/schemas/cosmetic";
+import {
+  ColorPalette,
+  DefaultPattern,
+  Pattern,
+} from "../../core/CosmeticSchemas";
 import { PatternDecoder } from "../../core/PatternDecoder";
-import { PlayerPattern } from "../../core/schemas";
+import { type PlayerPattern } from "../../core/Schemas";
 import { translateText } from "../Utils";
 
 export const BUTTON_WIDTH = 150;

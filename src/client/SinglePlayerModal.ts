@@ -47,6 +47,7 @@ export class SinglePlayerModal extends LitElement {
   @state() private gameMode: GameMode = GameMode.FFA;
   @state() private teamCount: TeamCountConfig = 2;
   @state() private economyMode: GameEconomyMode = GameEconomyMode.Classic;
+  @state() private aiSkirmish: boolean = false;
 
   @state() private disabledUnits: UnitType[] = [];
 
@@ -265,6 +266,22 @@ export class SinglePlayerModal extends LitElement {
               </label>
 
               <label
+                for="singleplayer-modal-ai-skirmish"
+                class="option-card ${this.aiSkirmish ? "selected" : ""}"
+              >
+                <div class="checkbox-icon"></div>
+                <input
+                  type="checkbox"
+                  id="singleplayer-modal-ai-skirmish"
+                  @change=${this.handleAISkirmishChange}
+                  .checked=${this.aiSkirmish}
+                />
+                <div class="option-card-title">
+                  ${translateText("single_modal.ai_skirmish")}
+                </div>
+              </label>
+
+              <label
                 for="singleplayer-modal-disable-npcs"
                 class="option-card ${this.disableNPCs ? "selected" : ""}"
               >
@@ -425,6 +442,13 @@ export class SinglePlayerModal extends LitElement {
     this.disableNPCs = Boolean((e.target as HTMLInputElement).checked);
   }
 
+  private handleAISkirmishChange(e: Event) {
+    this.aiSkirmish = Boolean((e.target as HTMLInputElement).checked);
+    if (this.aiSkirmish) {
+      this.bots = Math.min(6, Math.max(4, this.bots));
+    }
+  }
+
   private handleGameModeSelection(value: GameMode) {
     this.gameMode = value;
   }
@@ -471,7 +495,15 @@ export class SinglePlayerModal extends LitElement {
     );
     const clientID = generateID();
     const gameID = generateID();
-
+    const players: Array<{
+      clientID: string;
+      username: string;
+      cosmetics?: {
+        flag: string;
+        pattern?: string;
+        color?: { color: string };
+      };
+    }> = [];
     const usernameInput = document.querySelector(
       "username-input",
     ) as UsernameInput;
@@ -488,6 +520,20 @@ export class SinglePlayerModal extends LitElement {
     selectedPattern ??= null;
 
     const selectedColor = this.userSettings.getSelectedColor();
+    players.push({
+      clientID,
+      username: usernameInput.getCurrentUsername(),
+      cosmetics: {
+        flag:
+          flagInput.getCurrentFlag() === "xx" ? "" : flagInput.getCurrentFlag(),
+        pattern: selectedPattern ?? undefined,
+        color: selectedColor ? { color: selectedColor } : undefined,
+      },
+    });
+
+    const botCount = this.aiSkirmish
+      ? Math.min(6, Math.max(4, this.bots))
+      : this.bots;
 
     this.dispatchEvent(
       new CustomEvent("join-lobby", {
@@ -496,20 +542,7 @@ export class SinglePlayerModal extends LitElement {
           gameID: gameID,
           gameStartInfo: {
             gameID: gameID,
-            players: [
-              {
-                clientID,
-                username: usernameInput.getCurrentUsername(),
-                cosmetics: {
-                  flag:
-                    flagInput.getCurrentFlag() === "xx"
-                      ? ""
-                      : flagInput.getCurrentFlag(),
-                  pattern: selectedPattern ?? undefined,
-                  color: selectedColor ? { color: selectedColor } : undefined,
-                },
-              },
-            ],
+            players,
             config: {
               gameMap: this.selectedMap,
               gameMapSize: this.compactMap
@@ -520,13 +553,14 @@ export class SinglePlayerModal extends LitElement {
               playerTeams: this.teamCount,
               difficulty: this.selectedDifficulty,
               economyMode: this.economyMode,
-              disableNPCs: this.disableNPCs,
-              bots: this.bots,
+              disableNPCs: this.aiSkirmish ? true : this.disableNPCs,
+              bots: botCount,
               infiniteGold: this.infiniteGold,
               donateGold: true,
               donateTroops: true,
               infiniteTroops: this.infiniteTroops,
               instantBuild: this.instantBuild,
+              realismMode: this.aiSkirmish,
               disabledUnits: this.disabledUnits
                 .map((u) => Object.values(UnitType).find((ut) => ut === u))
                 .filter((ut): ut is UnitType => ut !== undefined),

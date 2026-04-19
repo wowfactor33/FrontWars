@@ -34,6 +34,7 @@ import { AllianceImpl } from "./AllianceImpl";
 import { AllianceRequestImpl } from "./AllianceRequestImpl";
 import { Config } from "../configuration/Config";
 import { PlayerImpl } from "./PlayerImpl";
+import { countryEconomyForName } from "./Geopolitics";
 import { RailNetwork } from "./RailNetwork";
 import { Stats } from "./Stats";
 import { StatsImpl } from "./StatsImpl";
@@ -436,6 +437,9 @@ export class GameImpl implements Game {
       this.config().startManpower(playerInfo),
       team ?? this.maybeAssignTeam(playerInfo),
     );
+    const economy = countryEconomyForName(playerInfo.name);
+    player.addGold(economy.startGold);
+    player.addOil(economy.startOil);
     this._playersBySmallID.push(player);
     this.nextPlayerID++;
     this._players.set(playerInfo.id, player);

@@ -292,6 +292,10 @@ export class PlayerView {
     return this.data.gold;
   }
 
+  oil(): Gold {
+    return this.data.oil;
+  }
+
   troops(): number {
     return this.data.troops;
   }

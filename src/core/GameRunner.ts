@@ -31,6 +31,7 @@ import { fixProfaneUsername } from "./validations/username";
 import { getConfig } from "./configuration/ConfigLoader";
 import { loadTerrainMap } from "./game/TerrainMapLoader";
 import { placeName } from "../client/graphics/NameBoxCalculator";
+import { countryKeyFromName, type CountryKey } from "./game/Geopolitics";
 
 export async function createGameRunner(
   gameStart: GameStartInfo,
@@ -96,12 +97,27 @@ export class GameRunner {
   ) {}
 
   init() {
-    if (this.game.config().bots() > 0) {
+    const realismMode = this.game.config().gameConfig().realismMode === true;
+    if (realismMode) {
+      const reservedCountries = this.game
+        .players()
+        .map((player) => countryKeyFromName(player.name()))
+        .filter((country): country is CountryKey => country !== null);
+
+      if (this.game.config().bots() > 0) {
+        this.game.addExecution(
+          ...this.execManager.spawnCountryExecutions(
+            this.game.config().numBots(),
+            reservedCountries,
+          ),
+        );
+      }
+    } else if (this.game.config().bots() > 0) {
       this.game.addExecution(
         ...this.execManager.spawnBots(this.game.config().numBots()),
       );
     }
-    if (this.game.config().spawnNPCs()) {
+    if (!realismMode && this.game.config().spawnNPCs()) {
       this.game.addExecution(...this.execManager.fakeHumanExecutions());
     }
     this.game.addExecution(new WinCheckExecution());

@@ -6,9 +6,9 @@ import warshipIcon from "../../../../resources/images/BattleshipIconWhite.svg";
 import cityIcon from "../../../../resources/images/CityIconWhite.svg";
 import factoryIcon from "../../../../resources/images/FactoryIconWhite.svg";
 import goldCoinIcon from "../../../../resources/images/GoldCoinIcon.svg";
-import missileSiloIcon from "../../../../resources/images/MissileSiloIconWhite.svg";
+import missileSiloIcon from "../../../../resources/images/MissileSiloUnit.svg";
 import portIcon from "../../../../resources/images/PortIcon.svg";
-import samLauncherIcon from "../../../../resources/images/SamLauncherIconWhite.svg";
+import samLauncherIcon from "../../../../resources/images/SamLauncherUnitWhite.png";
 import { renderPlayerFlag } from "../../../core/CustomFlag";
 import { EventBus } from "../../../core/EventBus";
 import {
@@ -355,6 +355,16 @@ export class PlayerInfoOverlay extends LitElement implements Layer {
                 />
                 <span class="w-full text-center"
                   >${renderNumber(player.gold())}</span
+                >
+              </div>
+              <div
+                class="flex p-1 mb-1 mt-1 w-full border rounded-md border-zinc-400
+                          font-bold text-zinc-200 text-sm opacity-80"
+                translate="no"
+              >
+                <span aria-hidden="true">OIL</span>
+                <span class="w-full text-center"
+                  >${renderNumber(player.oil())}</span
                 >
               </div>
               <div class="flex flex-wrap max-w-3xl gap-1">

@@ -50,6 +50,13 @@ export const UserMeResponseSchema = z.object({
 });
 export type UserMeResponse = z.infer<typeof UserMeResponseSchema>;
 
+export const PlayerProfileSchema = z.object({
+  id: z.string(),
+  publicId: z.string().optional(),
+  username: z.string().optional(),
+});
+export type PlayerProfile = z.infer<typeof PlayerProfileSchema>;
+
 export const StripeCreateCheckoutSessionResponseSchema = z.object({
   id: z.string(),
   object: z.literal("checkout.session"),

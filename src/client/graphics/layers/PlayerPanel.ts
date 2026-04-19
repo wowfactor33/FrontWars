@@ -4,11 +4,11 @@ import allianceIcon from "../../../../resources/images/AllianceIconWhite.svg";
 import chatIcon from "../../../../resources/images/ChatIconWhite.svg";
 import donateGoldIcon from "../../../../resources/images/DonateGoldIconWhite.svg";
 import donateTroopIcon from "../../../../resources/images/DonateTroopIconWhite.svg";
+import embargoIcon from "../../../../resources/images/EmbargoWhiteIcon.svg";
 import emojiIcon from "../../../../resources/images/EmojiIconWhite.svg";
-import stopTradingIcon from "../../../../resources/images/StopIconWhite.png";
+import goldCoinIcon from "../../../../resources/images/GoldCoinIcon.svg";
 import targetIcon from "../../../../resources/images/TargetIconWhite.svg";
-import startTradingIcon from "../../../../resources/images/TradingIconWhite.png";
-import traitorIcon from "../../../../resources/images/TraitorIconLightRed.svg";
+import traitorIcon from "../../../../resources/images/TraitorIcon.svg";
 import breakAllianceIcon from "../../../../resources/images/TraitorIconWhite.svg";
 import { EventBus } from "../../../core/EventBus";
 import {
@@ -32,12 +32,7 @@ import {
   SendEmojiIntentEvent,
   SendTargetPlayerIntentEvent,
 } from "../../Transport";
-import {
-  renderDuration,
-  renderNumber,
-  renderTroops,
-  translateText,
-} from "../../Utils";
+import { renderDuration, renderNumber, renderTroops, translateText } from "../../Utils";
 import { UIState } from "../UIState";
 import { ChatModal } from "./ChatModal";
 import { EmojiTable } from "./EmojiTable";
@@ -461,6 +456,17 @@ export class PlayerPanel extends LitElement implements Layer {
           class="inline-flex items-center gap-1.5 rounded-full bg-white/[0.04] px-2.5 py-1
                     text-base font-semibold text-zinc-200"
         >
+          <span class="mr-0.5">OIL</span>
+          <span translate="no" class="inline-block w-[45px] text-right">
+            ${renderNumber(other.oil() || 0)}
+          </span>
+          <span class="opacity-95 whitespace-nowrap">Oil</span>
+        </div>
+
+        <div
+          class="inline-flex items-center gap-1.5 rounded-full bg-white/[0.04] px-2.5 py-1
+                    text-base font-semibold text-zinc-200"
+        >
           <span class="mr-0.5">🛡️</span>
           <span translate="no" class="inline-block w-[45px] text-right">
             ${renderTroops(other.troops() || 0)}
@@ -835,3 +841,5 @@ export class PlayerPanel extends LitElement implements Layer {
     `;
   }
 }
+const stopTradingIcon = embargoIcon;
+const startTradingIcon = goldCoinIcon;

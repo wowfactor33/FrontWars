@@ -181,18 +181,21 @@ export class LocalServer {
     if (this.isReplay) {
       return;
     }
-    const players: PlayerRecord[] = [
-      {
-        persistentID: getPersistentID(),
-        username: this.lobbyConfig.playerName,
-        clientID: this.lobbyConfig.clientID,
-        stats: this.allPlayersStats[this.lobbyConfig.clientID],
-        cosmetics: this.lobbyConfig.gameStartInfo?.players[0].cosmetics,
-      },
-    ];
     if (this.lobbyConfig.gameStartInfo === undefined) {
       throw new Error("missing gameStartInfo");
     }
+    const players: PlayerRecord[] =
+      this.lobbyConfig.gameStartInfo.players.length === 0
+        ? []
+        : [
+            {
+              persistentID: getPersistentID(),
+              username: this.lobbyConfig.playerName,
+              clientID: this.lobbyConfig.clientID,
+              stats: this.allPlayersStats[this.lobbyConfig.clientID],
+              cosmetics: this.lobbyConfig.gameStartInfo.players[0].cosmetics,
+            },
+          ];
     const record = createPartialGameRecord(
       this.lobbyConfig.gameStartInfo.gameID,
       this.lobbyConfig.gameStartInfo.config,

@@ -7,9 +7,9 @@ import exitIcon from "../../../../resources/images/ExitIconWhite.svg";
 import explosionIcon from "../../../../resources/images/ExplosionIconWhite.svg";
 import mouseIcon from "../../../../resources/images/MouseIconWhite.svg";
 import ninjaIcon from "../../../../resources/images/NinjaIconWhite.svg";
+import playIcon from "../../../../resources/images/PlayIconWhite.svg";
 import settingsIcon from "../../../../resources/images/SettingIconWhite.svg";
 import treeIcon from "../../../../resources/images/TreeIconWhite.svg";
-import musicIcon from "../../../../resources/images/music.svg";
 import { EventBus } from "../../../core/EventBus";
 import { UserSettings } from "../../../core/game/UserSettings";
 import { CrazySDK } from "../../CrazyGamesSDK";
@@ -19,6 +19,8 @@ import { translateText } from "../../Utils";
 import SoundManager from "../../sound/SoundManager";
 import { Layer } from "./Layer";
 import { AdProvider } from "../../AdProvider";
+
+const musicIcon = playIcon;
 
 export class ShowSettingsModalEvent {
   constructor(

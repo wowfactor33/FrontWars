@@ -24,7 +24,9 @@ import { SpawnExecution } from "./SpawnExecution";
 import { TargetPlayerExecution } from "./TargetPlayerExecution";
 import { TransportShipExecution } from "./TransportShipExecution";
 import { UpgradeStructureExecution } from "./UpgradeStructureExecution";
+import { CountrySpawner } from "./CountrySpawner";
 import { simpleHash } from "../Util";
+import { type CountryKey } from "../game/Geopolitics";
 
 export class Executor {
   // private random = new PseudoRandom(999)
@@ -126,6 +128,16 @@ export class Executor {
 
   spawnBots(numBots: number): Execution[] {
     return new BotSpawner(this.mg, this.gameID).spawnBots(numBots);
+  }
+
+  spawnCountryExecutions(
+    numCountries: number,
+    excludeCountries: CountryKey[],
+  ): Execution[] {
+    return new CountrySpawner(this.mg, this.gameID).spawnCountries(
+      numCountries,
+      excludeCountries,
+    );
   }
 
   fakeHumanExecutions(): Execution[] {

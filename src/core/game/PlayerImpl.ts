@@ -46,6 +46,7 @@ import {
   bestShoreDeploymentSource,
   canBuildTransportShip,
 } from "./TransportShipUtils";
+import { oilCostForUnit } from "./Geopolitics";
 import { renderNumber, renderTroops } from "../../client/Utils";
 import { AttackImpl } from "./AttackImpl";
 import { ClientID } from "../Schemas";
@@ -71,6 +72,7 @@ export class PlayerImpl implements Player {
   public _pseudo_random: PseudoRandom;
 
   private _gold: bigint;
+  private _oil: bigint;
   private _troops: bigint;
 
   markedTraitorTick = -1;
@@ -115,6 +117,7 @@ export class PlayerImpl implements Player {
     this._name = sanitizeUsername(playerInfo.name);
     this._troops = toInt(startTroops);
     this._gold = 0n;
+    this._oil = 0n;
     this._displayName = this._name;
     this._pseudo_random = new PseudoRandom(simpleHash(this.playerInfo.id));
   }
@@ -141,6 +144,7 @@ export class PlayerImpl implements Player {
       isDisconnected: this.isDisconnected(),
       tilesOwned: this.numTilesOwned(),
       gold: this._gold,
+      oil: this._oil,
       troops: this.troops(),
       allies: this.alliances().map((a) => a.other(this).smallID()),
       embargoes: new Set([...this.embargoes.keys()].map((p) => p.toString())),
@@ -784,6 +788,23 @@ export class PlayerImpl implements Player {
     return actualRemoved;
   }
 
+  oil(): Gold {
+    return this._oil;
+  }
+
+  addOil(toAdd: Gold): void {
+    this._oil += toAdd;
+  }
+
+  removeOil(toRemove: Gold): Gold {
+    if (toRemove <= 0n) {
+      return 0n;
+    }
+    const actualRemoved = minInt(this._oil, toRemove);
+    this._oil -= actualRemoved;
+    return actualRemoved;
+  }
+
   troops(): number {
     return Number(this._troops);
   }
@@ -823,6 +844,7 @@ export class PlayerImpl implements Player {
     }
 
     const cost = this.mg.unitInfo(type).cost(this);
+    const oilCost = oilCostForUnit(type);
     const b = new UnitImpl(
       type,
       this.mg,
@@ -834,6 +856,7 @@ export class PlayerImpl implements Player {
     this._units.push(b);
     this.recordUnitConstructed(type);
     this.removeGold(cost);
+    this.removeOil(oilCost);
     this.removeTroops("troops" in params ? (params.troops ?? 0) : 0);
     this.mg.addUpdate(b.toUpdate());
     this.mg.addUnit(b);
@@ -866,12 +889,17 @@ export class PlayerImpl implements Player {
     if (this._gold < this.mg.config().unitInfo(unitType).cost(this)) {
       return false;
     }
+    if (this._oil < oilCostForUnit(unitType)) {
+      return false;
+    }
     return true;
   }
 
   upgradeUnit(unit: Unit) {
     const cost = this.mg.unitInfo(unit.type()).cost(this);
+    const oilCost = oilCostForUnit(unit.type());
     this.removeGold(cost);
+    this.removeOil(oilCost);
     unit.increaseLevel();
     this.recordUnitConstructed(unit.type());
   }
@@ -892,6 +920,7 @@ export class PlayerImpl implements Player {
           : this.canBuild(u, tile, validTiles),
         canUpgrade,
         cost: this.mg.config().unitInfo(u).cost(this),
+        oilCost: oilCostForUnit(u),
         type: u,
       } as BuildableUnit;
     });
@@ -907,7 +936,11 @@ export class PlayerImpl implements Player {
     }
 
     const cost = this.mg.unitInfo(unitType).cost(this);
-    if (!this.isAlive() || this.gold() < cost) {
+    if (
+      !this.isAlive() ||
+      this.gold() < cost ||
+      this.oil() < oilCostForUnit(unitType)
+    ) {
       return false;
     }
     switch (unitType) {

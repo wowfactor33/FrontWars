@@ -3,6 +3,7 @@ import { GameMap, TileRef } from "../game/GameMap";
 import { calculateBoundingBox, getMode, inscribed, simpleHash } from "../Util";
 import { Config } from "../configuration/Config";
 import { GameImpl } from "../game/GameImpl";
+import { countryEconomyForName } from "../game/Geopolitics";
 
 export class PlayerExecution implements Execution {
   private readonly ticksPerClusterCalc = 20;
@@ -46,6 +47,8 @@ export class PlayerExecution implements Execution {
       // Player has no tiles, delete any remaining units and gold
       const gold = this.player.gold();
       this.player.removeGold(gold);
+      const oil = this.player.oil();
+      this.player.removeOil(oil);
       this.player.units().forEach((u) => {
         if (
           u.type() !== UnitType.AtomBomb &&
@@ -64,6 +67,12 @@ export class PlayerExecution implements Execution {
     this.player.addTroops(troopInc);
     const goldFromWorkers = this.config.goldAdditionRate(this.player);
     this.player.addGold(goldFromWorkers);
+    const economy = countryEconomyForName(this.player.name());
+    const oilIncome =
+      economy.oilPerTick +
+      this.player.units(UnitType.Port).length * economy.oilPerPort +
+      this.player.units(UnitType.Factory).length * economy.oilPerFactory;
+    this.player.addOil(BigInt(Math.max(0, oilIncome)));
 
     // Record stats
     this.mg.stats().goldWork(this.player, goldFromWorkers);

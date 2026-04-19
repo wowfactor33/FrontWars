@@ -187,7 +187,10 @@ export class TransformHandler {
 
   centerCamera() {
     this.clearTarget();
-    const player = this.game.myPlayer();
+    const player =
+      this.game.myPlayer() ??
+      this.game.players().find((candidate) => candidate.isAlive()) ??
+      this.game.players()[0];
     if (!player || !player.nameLocation()) return;
     this.target = new Cell(player.nameLocation().x, player.nameLocation().y);
     this.intervalID = setInterval(() => this.goTo(), GOTO_INTERVAL_MS);
@@ -195,9 +198,12 @@ export class TransformHandler {
 
   focusOn() {
     this.clearTarget();
-    const player = this.game.myPlayer();
+    const player =
+      this.game.myPlayer() ??
+      this.game.players().find((candidate) => candidate.isAlive()) ??
+      this.game.players()[0];
     if (!player || !player.nameLocation()) return;
-    
+
     this.target = new Cell(player.nameLocation().x, player.nameLocation().y);
     this.targetScale = 5;
     this.intervalID = setInterval(() => this.focusTo(), GOTO_INTERVAL_MS);

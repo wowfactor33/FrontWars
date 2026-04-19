@@ -18,7 +18,7 @@ export default async (env, argv) => {
   return {
     entry: "./src/client/Main.ts",
     output: {
-      publicPath: "/",
+      publicPath: "auto",
       filename: "js/[name].[contenthash].js", // Added content hash
       path: path.resolve(__dirname, "static"),
       clean: isProduction,
@@ -45,7 +45,12 @@ export default async (env, argv) => {
         },
         {
           test: /\.ts$/,
-          use: "ts-loader",
+          use: {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: isProduction,
+            },
+          },
           exclude: /node_modules/,
         },
         {
@@ -106,7 +111,7 @@ export default async (env, argv) => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: "./src/client/index.html",
+        template: "./src/client/desktop/index.html",
         filename: "index.html",
         // Add optimization for HTML
         minify: isProduction
@@ -140,9 +145,13 @@ export default async (env, argv) => {
         ],
         options: { concurrency: 100 },
       }),
-      new ESLintPlugin({
-        context: __dirname,
-      }),
+      ...(isProduction
+        ? []
+        : [
+            new ESLintPlugin({
+              context: __dirname,
+            }),
+          ]),
     ],
     optimization: {
       // Add optimization configuration for better caching

@@ -348,13 +348,11 @@ label.option-card:hover {
 }
 
 #helpModal .factory-icon {
-  mask: url("/resources/images/FactoryIconWhite.svg") no-repeat center /
-    cover;
+  mask: url("/resources/images/FactoryIconWhite.svg") no-repeat center / cover;
 }
 
 #helpModal .defense-post-icon {
-  mask: url("/resources/images/ShieldIconWhite.svg") no-repeat center /
-    cover;
+  mask: url("/resources/images/ShieldIconWhite.svg") no-repeat center / cover;
 }
 
 #helpModal .port-icon {
@@ -367,12 +365,12 @@ label.option-card:hover {
 }
 
 #helpModal .missile-silo-icon {
-  mask: url("/resources/images/MissileSiloIconWhite.svg") no-repeat
-    center / cover;
+  mask: url("../../../resources/images/MissileSiloUnit.svg") no-repeat center /
+    cover;
 }
 
 #helpModal .sam-launcher-icon {
-  mask: url("/resources/images/SamLauncherIconWhite.svg") no-repeat
+  mask: url("../../../resources/images/SamLauncherUnitWhite.png") no-repeat
     center / cover;
 }
 
@@ -381,8 +379,8 @@ label.option-card:hover {
 }
 
 #helpModal .hydrogen-bomb-icon {
-  mask: url("/resources/images/MushroomCloudIconWhite.svg") no-repeat
-    center / cover;
+  mask: url("/resources/images/MushroomCloudIconWhite.svg") no-repeat center /
+    cover;
 }
 
 #helpModal .mirv-icon {
@@ -398,23 +396,20 @@ label.option-card:hover {
 }
 
 #helpModal .alliance-icon {
-  mask: url("/resources/images/AllianceIconWhite.svg") no-repeat center /
-    cover;
+  mask: url("/resources/images/AllianceIconWhite.svg") no-repeat center / cover;
 }
 
 #helpModal .emoji-icon {
-  mask: url("/resources/images/EmojiIconWhite.svg") no-repeat center /
-    cover;
+  mask: url("/resources/images/EmojiIconWhite.svg") no-repeat center / cover;
 }
 
 #helpModal .betray-icon {
-  mask: url("/resources/images/TraitorIconWhite.svg") no-repeat center /
-    cover;
+  mask: url("/resources/images/TraitorIconWhite.svg") no-repeat center / cover;
 }
 
 #helpModal .donate-icon {
-  mask: url("/resources/images/DonateTroopIconWhite.svg") no-repeat
-    center / cover;
+  mask: url("/resources/images/DonateTroopIconWhite.svg") no-repeat center /
+    cover;
 }
 
 #helpModal .donate-gold-icon {
@@ -423,8 +418,7 @@ label.option-card:hover {
 }
 
 #helpModal .build-icon {
-  mask: url("/resources/images/BuildIconWhite.svg") no-repeat center /
-    cover;
+  mask: url("/resources/images/BuildIconWhite.svg") no-repeat center / cover;
 }
 
 #helpModal .info-icon {
@@ -589,7 +583,6 @@ label.option-card:hover {
     padding: 0;
   }
 }
-
 
 .option-title {
   margin: 0 0 16px 0;

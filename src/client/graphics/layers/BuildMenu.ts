@@ -5,11 +5,11 @@ import cityIcon from "../../../../resources/images/CityIconWhite.svg";
 import factoryIcon from "../../../../resources/images/FactoryIconWhite.svg";
 import goldCoinIcon from "../../../../resources/images/GoldCoinIcon.svg";
 import mirvIcon from "../../../../resources/images/MIRVIcon.svg";
-import missileSiloIcon from "../../../../resources/images/MissileSiloIconWhite.svg";
+import missileSiloIcon from "../../../../resources/images/MissileSiloUnit.svg";
 import hydrogenBombIcon from "../../../../resources/images/MushroomCloudIconWhite.svg";
 import atomBombIcon from "../../../../resources/images/NukeIconWhite.svg";
 import portIcon from "../../../../resources/images/PortIcon.svg";
-import samlauncherIcon from "../../../../resources/images/SamLauncherIconWhite.svg";
+import samlauncherIcon from "../../../../resources/images/SamLauncherUnitWhite.png";
 import shieldIcon from "../../../../resources/images/ShieldIconWhite.svg";
 import { translateText } from "../../../client/Utils";
 import { EventBus } from "../../../core/EventBus";
@@ -397,6 +397,15 @@ export class BuildMenu extends LitElement implements Layer {
     return 0n;
   }
 
+  public oilCost(item: BuildItemDisplay): Gold {
+    for (const bu of this.playerActions?.buildableUnits ?? []) {
+      if (bu.type === item.unitType) {
+        return bu.oilCost;
+      }
+    }
+    return 0n;
+  }
+
   public count(item: BuildItemDisplay): string {
     const player = this.game?.myPlayer();
     if (!player) {
@@ -462,7 +471,7 @@ export class BuildMenu extends LitElement implements Layer {
                     const remainingSeconds = (remainingMs / 1000).toFixed(1);
                     titleText = `Cooldown: ${remainingSeconds}s remaining`;
                   } else {
-                    titleText = translateText("build_menu.not_enough_money");
+                    titleText = "Not enough resources";
                   }
                 }
                 
@@ -498,6 +507,9 @@ export class BuildMenu extends LitElement implements Layer {
                         height="12"
                         style="vertical-align: middle;"
                       />
+                      ${this.oilCost(item) > 0n
+                        ? html`<span class="ml-1">${renderNumber(this.oilCost(item))} OIL</span>`
+                        : html``}
                     </span>
                     ${item.countable
                       ? html`<div class="build-count-chip">

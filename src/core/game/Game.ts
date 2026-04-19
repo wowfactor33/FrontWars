@@ -144,6 +144,16 @@ export enum GameMode {
   Team = "Team",
 }
 
+export enum GameMapSize {
+  Compact = "Compact",
+  Normal = "Normal",
+}
+
+export enum GameEconomyMode {
+  Classic = "Classic",
+  Fast = "Fast",
+}
+
 export type UnitInfo = {
   cost: (player: Player) => Gold;
   // Determines if its owner changes when its tile is conquered.
@@ -535,6 +545,9 @@ export type Player = {
   gold(): Gold;
   addGold(toAdd: Gold, tile?: TileRef): void;
   removeGold(toRemove: Gold): Gold;
+  oil(): Gold;
+  addOil(toAdd: Gold): void;
+  removeOil(toRemove: Gold): Gold;
   troops(): number;
   setTroops(troops: number): void;
   addTroops(troops: number): void;
@@ -734,6 +747,7 @@ export type BuildableUnit = {
   canUpgrade: number | false;
   type: UnitType;
   cost: Gold;
+  oilCost: Gold;
 };
 
 export type PlayerProfile = {

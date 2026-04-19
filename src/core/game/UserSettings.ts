@@ -1,4 +1,5 @@
 const PATTERN_KEY = "territoryPattern";
+const TERRITORY_COLOR_KEY = "settings.territoryColor";
 
 export class UserSettings {
   get(key: string, defaultValue: boolean): boolean {
@@ -111,8 +112,52 @@ export class UserSettings {
     }
   }
 
-  getSelectedPattern(): string | undefined {
-    return localStorage.getItem(PATTERN_KEY) ?? undefined;
+  getSelectedPattern(cosmetics?: {
+    colorPalettes?: Record<string, { name: string; primary?: string; secondary?: string }>;
+    patterns?: Record<string, { name: string }>;
+  }): string | {
+    colorPalette?: { name: string; primary?: string; secondary?: string };
+    name: string;
+    patternData: string;
+  } | undefined {
+    const value = localStorage.getItem(PATTERN_KEY) ?? undefined;
+    if (value === undefined || cosmetics === undefined) {
+      return value;
+    }
+
+    if (value.startsWith("pattern:")) {
+      const raw = value.slice("pattern:".length);
+      const [name, colorPaletteName] = raw.split(":");
+      const patternEntry = Object.entries(cosmetics.patterns ?? {}).find(
+        ([, pattern]) => pattern.name === name,
+      );
+
+      if (patternEntry === undefined) {
+        return undefined;
+      }
+
+      return {
+        colorPalette:
+          colorPaletteName === undefined
+            ? undefined
+            : {
+                name: colorPaletteName,
+                ...(cosmetics.colorPalettes?.[colorPaletteName] ?? {}),
+              },
+        name,
+        patternData: patternEntry[0],
+      };
+    }
+
+    const pattern = cosmetics.patterns?.[value];
+    if (pattern === undefined) {
+      return undefined;
+    }
+
+    return {
+      name: pattern.name,
+      patternData: value,
+    };
   }
 
   setSelectedPattern(base64: string | undefined): void {
@@ -121,5 +166,17 @@ export class UserSettings {
     } else {
       localStorage.setItem(PATTERN_KEY, base64);
     }
+  }
+
+  getSelectedColor(): string | undefined {
+    return localStorage.getItem(TERRITORY_COLOR_KEY) ?? undefined;
+  }
+
+  setSelectedColor(color: string | undefined): void {
+    if (color === undefined) {
+      localStorage.removeItem(TERRITORY_COLOR_KEY);
+      return;
+    }
+    localStorage.setItem(TERRITORY_COLOR_KEY, color);
   }
 }

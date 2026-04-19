@@ -4,11 +4,11 @@ import warshipIcon from "../../../../resources/images/BattleshipIconWhite.svg";
 import cityIcon from "../../../../resources/images/CityIconWhite.svg";
 import factoryIcon from "../../../../resources/images/FactoryIconWhite.svg";
 import mirvIcon from "../../../../resources/images/MIRVIcon.svg";
-import missileSiloIcon from "../../../../resources/images/MissileSiloIconWhite.svg";
+import missileSiloIcon from "../../../../resources/images/MissileSiloUnit.svg";
 import hydrogenBombIcon from "../../../../resources/images/MushroomCloudIconWhite.svg";
 import atomBombIcon from "../../../../resources/images/NukeIconWhite.svg";
 import portIcon from "../../../../resources/images/PortIcon.svg";
-import samLauncherIcon from "../../../../resources/images/SamLauncherIconWhite.svg";
+import samLauncherIcon from "../../../../resources/images/SamLauncherUnitWhite.png";
 import defensePostIcon from "../../../../resources/images/ShieldIconWhite.svg";
 import { EventBus } from "../../../core/EventBus";
 import { Gold, PlayerActions, UnitType } from "../../../core/game/Game";
@@ -74,24 +74,36 @@ export class UnitDisplay extends LitElement implements Layer {
     return 0n;
   }
 
+  private oilCost(item: UnitType): Gold {
+    for (const bu of this.playerActions?.buildableUnits ?? []) {
+      if (bu.type === item) {
+        return bu.oilCost;
+      }
+    }
+    return 0n;
+  }
+
   private canBuild(item: UnitType): boolean {
     if (this.game?.config().isUnitDisabled(item)) return false;
     const player = this.game?.myPlayer();
+    const hasOil = this.oilCost(item) <= (player?.oil() ?? 0n);
     switch (item) {
       case UnitType.AtomBomb:
       case UnitType.HydrogenBomb:
       case UnitType.MIRV:
         return (
           this.cost(item) <= (player?.gold() ?? 0n) &&
+          hasOil &&
           (player?.units(UnitType.MissileSilo).length ?? 0) > 0
         );
       case UnitType.Warship:
         return (
           this.cost(item) <= (player?.gold() ?? 0n) &&
+          hasOil &&
           (player?.units(UnitType.Port).length ?? 0) > 0
         );
       default:
-        return this.cost(item) <= (player?.gold() ?? 0n);
+        return this.cost(item) <= (player?.gold() ?? 0n) && hasOil;
     }
   }
 
@@ -255,6 +267,14 @@ export class UnitDisplay extends LitElement implements Layer {
                   >
                   ${translateText("player_info_overlay.gold")}
                 </div>
+                ${this.oilCost(unitType) > 0n
+                  ? html`<div>
+                      <span class="text-zinc-300"
+                        >${renderNumber(this.oilCost(unitType))}</span
+                      >
+                      Oil
+                    </div>`
+                  : null}
               </div>
             `
           : null}

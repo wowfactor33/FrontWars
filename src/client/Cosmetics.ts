@@ -1,9 +1,27 @@
 import { UserMeResponse } from "../core/ApiSchemas";
-import { Cosmetics, Pattern } from "../core/schemas/cosmetic";
+import { Cosmetics, Pattern } from "../core/CosmeticSchemas";
 import cosmetics from "../../resources/cosmetics/cosmetics.json";
 
 export async function fetchCosmetics(): Promise<Cosmetics | null> {
-  return cosmetics as any;
+  const raw = cosmetics as any;
+  const patterns = Object.fromEntries(
+    Object.entries(raw.patterns ?? {}).map(([patternData, pattern]) => [
+      patternData,
+      {
+        ...pattern,
+        colorPalettes: pattern.colorPalettes ?? [],
+        pattern: patternData,
+        product: null,
+      },
+    ]),
+  );
+
+  return {
+    colorPalettes: raw.colorPalettes ?? {},
+    flag: raw.flag,
+    patterns,
+    role_groups: raw.role_groups ?? {},
+  } as Cosmetics;
 }
 
 export function patternRelationship(

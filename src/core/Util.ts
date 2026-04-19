@@ -192,6 +192,40 @@ export function createGameRecord(
   return record;
 }
 
+export function createPartialGameRecord(
+  gameID: GameID,
+  config: GameConfig,
+  players: PlayerRecord[],
+  allTurns: Turn[],
+  start: number,
+  end: number,
+  winner: Winner,
+): GameRecord {
+  const duration = Math.floor((end - start) / 1000);
+  const num_turns = allTurns.length;
+  const turns = allTurns.filter(
+    (t) => t.intents.length !== 0 || t.hash !== undefined,
+  );
+
+  return {
+    domain: "frontwars.pages",
+    gitCommit: "0000000000000000000000000000000000000000",
+    info: {
+      config,
+      duration,
+      end,
+      gameID,
+      num_turns,
+      players,
+      start,
+      winner,
+    },
+    subdomain: "github-pages",
+    turns,
+    version: "v0.0.2",
+  };
+}
+
 export function decompressGameRecord(gameRecord: GameRecord) {
   const turns: Turn[] = [];
   let lastTurnNum = -1;

@@ -91,6 +91,7 @@
     "options_title": "single_modal.options_title",
     "bots": "single_modal.bots",
     "bots_disabled": "single_modal.bots_disabled",
+    "ai_skirmish": "single_modal.ai_skirmish",
     "disable_nations": "single_modal.disable_nations",
     "instant_build": "single_modal.instant_build",
     "infinite_gold": "single_modal.infinite_gold",

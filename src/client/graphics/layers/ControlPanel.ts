@@ -36,6 +36,9 @@ export class ControlPanel extends LitElement implements Layer {
   @state()
   private _gold: Gold;
 
+  @state()
+  private _oil: Gold;
+
   private _troopRateIsIncreasing: boolean = true;
 
   private _lastTroopIncreaseRate: number;
@@ -89,6 +92,7 @@ export class ControlPanel extends LitElement implements Layer {
     this._troops = player.troops();
     this._maxTroops = this.game.config().maxTroops(player);
     this._gold = player.gold();
+    this._oil = player.oil();
     this._troops = player.troops();
     this.troopRate = this.game.config().troopIncreaseRate(player) * 10;
     this.requestUpdate();
@@ -190,6 +194,10 @@ export class ControlPanel extends LitElement implements Layer {
               >${translateText("control_panel.gold")}:</span
             >
             <span translate="no">${renderNumber(this._gold)}</span>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-bold">Oil:</span>
+            <span translate="no">${renderNumber(this._oil)}</span>
           </div>
         </div>
 
