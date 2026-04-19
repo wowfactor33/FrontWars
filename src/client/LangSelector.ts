@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
+import { assetUrl } from "./AssetPath";
 import "./LanguageModal";
 import type { LanguageModal } from "./LanguageModal";
 
@@ -382,7 +383,7 @@ export class LangSelector extends LitElement {
           <img
             id="lang-flag"
             class="w-12 h-8"
-            src="/flags/${currentLang.svg}.svg"
+            src=${assetUrl(`flags/${currentLang.svg}.svg`)}
             alt="flag"
           />
           <span id="lang-name">${currentLang.native} (${currentLang.en})</span>
@@ -404,7 +405,7 @@ export class LangSelector extends LitElement {
           <img
             id="lang-flag"
             class="w-12 h-8"
-            src="/flags/${currentLang.svg}.svg"
+            src=${assetUrl(`flags/${currentLang.svg}.svg`)}
             alt="flag"
           />
           <span id="lang-name">${currentLang.native} (${currentLang.en})</span>

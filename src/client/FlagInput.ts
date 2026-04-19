@@ -2,6 +2,7 @@ import { LitElement, css, html } from "lit";
 import { customElement, state } from "lit/decorators.js";
 import { renderPlayerFlag } from "../core/CustomFlag";
 import { FlagSchema } from "../core/Schemas";
+import { assetUrl } from "./AssetPath";
 import { translateText } from "./Utils";
 import { AdProvider } from "./AdProvider";
 
@@ -100,13 +101,16 @@ export class FlagInput extends LitElement {
       renderPlayerFlag(this.flag, preview);
     } else {
       const img = document.createElement("img");
-      img.src = this.flag ? `/flags/${this.flag}.svg` : `/flags/xx.svg`;
+      const fallbackFlag = assetUrl("flags/xx.svg");
+      img.src = this.flag
+        ? assetUrl(`flags/${this.flag}.svg`)
+        : fallbackFlag;
       img.style.width = "100%";
       img.style.height = "100%";
       img.style.objectFit = "contain";
       img.onerror = () => {
-        if (!img.src.endsWith("/flags/xx.svg")) {
-          img.src = "/flags/xx.svg";
+        if (img.src !== fallbackFlag) {
+          img.src = fallbackFlag;
         }
       };
       preview.appendChild(img);

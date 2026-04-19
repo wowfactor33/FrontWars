@@ -17,6 +17,7 @@ import { Theme } from "../../../core/configuration/Config";
 import { AllPlayers, Cell, nukeTypes } from "../../../core/game/Game";
 import { GameView, PlayerView } from "../../../core/game/GameView";
 import { UserSettings } from "../../../core/game/UserSettings";
+import { assetUrl } from "../../AssetPath";
 import { AlternateViewEvent } from "../../InputHandler";
 import { createCanvas, renderNumber, renderTroops } from "../../Utils";
 import { TransformHandler } from "../TransformHandler";
@@ -246,7 +247,7 @@ export class NameLayer implements Layer {
       } else if (flag !== undefined && flag !== null) {
         const flagImg = document.createElement("img");
         applyFlagStyles(flagImg);
-        flagImg.src = "/flags/" + flag + ".svg";
+        flagImg.src = assetUrl(`flags/${flag}.svg`);
         nameDiv.appendChild(flagImg);
       }
     }

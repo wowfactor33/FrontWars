@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, query } from "lit/decorators.js";
+import { assetUrl } from "./AssetPath";
 import {
   getAltKey,
   getModifierKey,
@@ -233,7 +234,7 @@ export class HelpModal extends LitElement {
               ${translateText("help_modal.ui_leaderboard")}
             </div>
             <img
-              src="/images/helpModal/leaderboard2.webp"
+              src=${assetUrl("images/helpModal/leaderboard2.webp")}
               alt="Leaderboard"
               title="Leaderboard"
               class="default-image"
@@ -253,7 +254,7 @@ export class HelpModal extends LitElement {
               ${translateText("help_modal.ui_control")}
             </div>
             <img
-              src="/images/helpModal/controlPanel.webp"
+              src=${assetUrl("images/helpModal/controlPanel.webp")}
               alt="Control panel"
               title="Control panel"
               class="default-image"
@@ -280,14 +281,14 @@ export class HelpModal extends LitElement {
             </div>
             <div class="flex flex-col gap-4">
               <img
-                src="/images/helpModal/eventsPanel.webp"
+                src=${assetUrl("images/helpModal/eventsPanel.webp")}
                 alt="Event panel"
                 title="Event panel"
                 class="default-image"
                 loading="lazy"
               />
               <img
-                src="/images/helpModal/eventsPanelAttack.webp"
+                src=${assetUrl("images/helpModal/eventsPanelAttack.webp")}
                 alt="Event panel"
                 title="Event panel"
                 class="default-image"
@@ -319,7 +320,7 @@ export class HelpModal extends LitElement {
               ${translateText("help_modal.ui_options")}
             </div>
             <img
-              src="/images/helpModal/options2.webp"
+              src=${assetUrl("images/helpModal/options2.webp")}
               alt="Options"
               title="Options"
               class="default-image"
@@ -347,7 +348,7 @@ export class HelpModal extends LitElement {
               ${translateText("help_modal.ui_playeroverlay")}
             </div>
             <img
-              src="/images/helpModal/playerInfoOverlay.webp"
+              src=${assetUrl("images/helpModal/playerInfoOverlay.webp")}
               alt="Player info overlay"
               title="Player info overlay"
               class="default-image"
@@ -370,14 +371,14 @@ export class HelpModal extends LitElement {
         <div class="flex flex-col md:flex-row gap-4">
           <div class="flex flex-col gap-4">
             <img
-              src="/images/helpModal/radialMenu2.webp"
+              src=${assetUrl("images/helpModal/radialMenu2.webp")}
               alt="Radial menu"
               title="Radial menu"
               class="default-image"
               loading="lazy"
             />
             <img
-              src="/images/helpModal/radialMenuAlly.webp"
+              src=${assetUrl("images/helpModal/radialMenuAlly.webp")}
               alt="Radial menu ally"
               title="Radial menu ally"
               class="default-image"
@@ -393,7 +394,7 @@ export class HelpModal extends LitElement {
               </li>
               <li class="mb-4">
                 <img
-                  src="/images/InfoIcon.svg"
+                  src=${assetUrl("images/InfoIcon.svg")}
                   class="inline-block icon"
                   style="fill: white; background: transparent;"
                   loading="lazy"
@@ -429,7 +430,7 @@ export class HelpModal extends LitElement {
                 ${translateText("help_modal.info_enemy_panel")}
               </div>
               <img
-                src="/images/helpModal/infoMenu2.webp"
+                src=${assetUrl("images/helpModal/infoMenu2.webp")}
                 alt="Enemy info panel"
                 title="Enemy info panel"
                 class="info-panel-img"
@@ -457,7 +458,7 @@ export class HelpModal extends LitElement {
                 </li>
                 <li class="mb-4">
                   <div class="inline-block icon">
-                    <img src="/images/helpModal/stopTrading.webp" />
+                    <img src=${assetUrl("images/helpModal/stopTrading.webp")} />
                   </div>
                   <span>${translateText("help_modal.info_trade")}</span>
                 </li>
@@ -473,7 +474,7 @@ export class HelpModal extends LitElement {
                 ${translateText("help_modal.info_ally_panel")}
               </div>
               <img
-                src="/images/helpModal/infoMenu2Ally.webp"
+                src=${assetUrl("images/helpModal/infoMenu2Ally.webp")}
                 alt="Ally info panel"
                 title="Ally info panel"
                 class="info-panel-img"
@@ -588,7 +589,7 @@ export class HelpModal extends LitElement {
                 ${translateText("help_modal.icon_crown")}
               </div>
               <img
-                src="/images/helpModal/crown.webp"
+                src=${assetUrl("images/helpModal/crown.webp")}
                 alt="Number 1 player"
                 title="Number 1 player"
                 class="player-icon-img w-full"
@@ -605,7 +606,7 @@ export class HelpModal extends LitElement {
                 ${translateText("help_modal.icon_traitor")}
               </div>
               <img
-                src="/images/helpModal/traitor2.webp"
+                src=${assetUrl("images/helpModal/traitor2.webp")}
                 alt="Traitor"
                 title="Traitor"
                 class="player-icon-img w-full"
@@ -622,7 +623,7 @@ export class HelpModal extends LitElement {
                 ${translateText("help_modal.icon_ally")}
               </div>
               <img
-                src="/images/helpModal/ally2.webp"
+                src=${assetUrl("images/helpModal/ally2.webp")}
                 alt="Ally"
                 title="Ally"
                 class="player-icon-img w-full"
@@ -641,7 +642,7 @@ export class HelpModal extends LitElement {
                 ${translateText("help_modal.icon_embargo")}
               </div>
               <img
-                src="/images/helpModal/embargo.webp"
+                src=${assetUrl("images/helpModal/embargo.webp")}
                 alt="Stopped trading"
                 title="Stopped trading"
                 class="player-icon-img w-full"
@@ -658,7 +659,7 @@ export class HelpModal extends LitElement {
                 ${translateText("help_modal.icon_request")}
               </div>
               <img
-                src="/images/helpModal/allianceRequest.webp"
+                src=${assetUrl("images/helpModal/allianceRequest.webp")}
                 alt="Alliance Request"
                 title="Alliance Request"
                 class="player-icon-img w-full"

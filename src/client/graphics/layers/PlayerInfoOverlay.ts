@@ -21,6 +21,7 @@ import {
 import { TileRef } from "../../../core/game/GameMap";
 import { AllianceView } from "../../../core/game/GameUpdates";
 import { GameView, PlayerView, UnitView } from "../../../core/game/GameView";
+import { assetUrl } from "../../AssetPath";
 import { ContextMenuEvent, MouseMoveEvent } from "../../InputHandler";
 import {
   renderDuration,
@@ -303,7 +304,7 @@ export class PlayerInfoOverlay extends LitElement implements Layer {
                 ></div>`
               : html`<img
                   class="h-8 mr-1 aspect-[3/4]"
-                  src=${"/flags/" + player.cosmetics.flag! + ".svg"}
+                  src=${assetUrl(`flags/${player.cosmetics.flag!}.svg`)}
                 />`
             : html``}
           ${player.name()}

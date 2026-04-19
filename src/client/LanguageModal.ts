@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, property, query } from "lit/decorators.js";
+import { assetUrl } from "./AssetPath";
 import { translateText } from "../client/Utils";
 import "./components/baseComponents/Modal";
 
@@ -107,7 +108,7 @@ export class LanguageModal extends LitElement {
                   @click=${() => this.selectLanguage(lang.code)}
                 >
                   <img
-                    src="/flags/${lang.svg}.svg"
+                    src=${assetUrl(`flags/${lang.svg}.svg`)}
                     class="w-12 h-8 object-contain"
                     alt="${lang.code}"
                   />

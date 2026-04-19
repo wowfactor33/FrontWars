@@ -1,5 +1,6 @@
 import { LitElement, html } from "lit";
 import { customElement, query, state } from "lit/decorators.js";
+import { assetUrl } from "./AssetPath";
 import Countries from "./data/countries.json";
 import { translateText } from "./Utils";
 
@@ -54,11 +55,11 @@ export class FlagInputModal extends LitElement {
                   >
                     <img
                       class="country-flag w-full h-auto"
-                      src="/flags/${country.code}.svg"
+                      src=${assetUrl(`flags/${country.code}.svg`)}
                       @error=${(e: Event) => {
                         const img = e.currentTarget as HTMLImageElement;
-                        const fallback = "/flags/xx.svg";
-                        if (img.src && !img.src.endsWith(fallback)) {
+                        const fallback = assetUrl("flags/xx.svg");
+                        if (img.src && img.src !== fallback) {
                           img.src = fallback;
                         }
                       }}

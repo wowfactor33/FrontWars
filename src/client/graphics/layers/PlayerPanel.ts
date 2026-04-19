@@ -21,6 +21,7 @@ import {
 import { TileRef } from "../../../core/game/GameMap";
 import { GameView, PlayerView } from "../../../core/game/GameView";
 import { Emoji, flattenedEmojiTable } from "../../../core/Util";
+import { assetUrl } from "../../AssetPath";
 import { actionButton } from "../../components/ui/ActionButton";
 import "../../components/ui/Divider";
 import Countries from "../../data/countries.json";
@@ -405,7 +406,7 @@ export class PlayerPanel extends LitElement implements Layer {
       <div class="flex items-center gap-2.5 flex-wrap">
         ${country && typeof flagCode === "string"
           ? html`<img
-              src="/flags/${encodeURIComponent(flagCode)}.svg"
+              src=${assetUrl(`flags/${encodeURIComponent(flagCode)}.svg`)}
               alt=${country?.name || "Flag"}
               class="h-10 w-10 rounded-full object-cover"
               @error=${(e: Event) => {
