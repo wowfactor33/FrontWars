@@ -91,7 +91,6 @@ export function joinLobby(
       );
       terrainLoad = loadTerrainMap(
         message.gameMap,
-        message.gameMapSize,
         terrainMapFileLoader,
       );
       onPrestart();
@@ -169,7 +168,6 @@ async function createClientGame(
   } else {
     gameMap = await loadTerrainMap(
       lobbyConfig.gameStartInfo.config.gameMap,
-      lobbyConfig.gameStartInfo.config.gameMapSize,
       mapLoader,
     );
   }
