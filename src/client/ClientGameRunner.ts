@@ -50,6 +50,8 @@ import { createCanvas } from "./Utils";
 import { createRenderer, GameRenderer } from "./graphics/GameRenderer";
 import SoundManager from "./sound/SoundManager";
 
+const STRUCTURE_UPGRADE_UI_COOLDOWN_MS = 250;
+
 export interface LobbyConfig {
   serverConfig: ServerConfig;
   cosmetics: PlayerCosmeticRefs;
@@ -224,10 +226,7 @@ export class ClientGameRunner {
     private gameView: GameView,
   ) {
     this.lastMessageTime = Date.now();
-    // Set cooldowns from config (in milliseconds)
-    const cooldownTicks = this.gameView.config().upgradeCooldownTicks();
-    const cooldownMs = cooldownTicks * 100; // 100ms per tick
-    this.input.setMacroCooldown(cooldownMs);
+    this.input.setMacroCooldown(STRUCTURE_UPGRADE_UI_COOLDOWN_MS);
   }
 
   private saveGame(update: WinUpdate) {

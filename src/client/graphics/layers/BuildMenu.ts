@@ -35,6 +35,8 @@ import { renderNumber } from "../../Utils";
 import { TransformHandler } from "../TransformHandler";
 import { Layer } from "./Layer";
 
+const STRUCTURE_UPGRADE_UI_COOLDOWN_MS = 250;
+
 export interface BuildItemDisplay {
   unitType: UnitType;
   icon: string;
@@ -431,16 +433,14 @@ export class BuildMenu extends LitElement implements Layer {
   }
 
   public isOnCooldown(): boolean {
-    const cooldownTicks = this.game.config().upgradeCooldownTicks();
-    const cooldownMs = cooldownTicks * 100; // 100ms per tick
-    return Date.now() - this.lastUpgradeTime < cooldownMs;
+    return (
+      Date.now() - this.lastUpgradeTime < STRUCTURE_UPGRADE_UI_COOLDOWN_MS
+    );
   }
 
   public getRemainingCooldownMs(): number {
-    const cooldownTicks = this.game.config().upgradeCooldownTicks();
-    const cooldownMs = cooldownTicks * 100; // 100ms per tick
     const elapsed = Date.now() - this.lastUpgradeTime;
-    return Math.max(0, cooldownMs - elapsed);
+    return Math.max(0, STRUCTURE_UPGRADE_UI_COOLDOWN_MS - elapsed);
   }
 
   render() {

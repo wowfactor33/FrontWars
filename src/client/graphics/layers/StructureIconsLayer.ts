@@ -39,6 +39,8 @@ import {
   ZOOM_THRESHOLD,
 } from "./StructureDrawingUtils";
 
+const STRUCTURE_UPGRADE_UI_COOLDOWN_MS = 250;
+
 extend([a11yPlugin]);
 
 class StructureRenderInfo {
@@ -315,9 +317,9 @@ export class StructureIconsLayer implements Layer {
   }
 
   private isOnCooldown(): boolean {
-    const cooldownTicks = this.game.config().upgradeCooldownTicks();
-    const cooldownMs = cooldownTicks * 100; // 100ms per tick
-    return Date.now() - this.lastUpgradeTime < cooldownMs;
+    return (
+      Date.now() - this.lastUpgradeTime < STRUCTURE_UPGRADE_UI_COOLDOWN_MS
+    );
   }
 
   private createStructure(e: MouseUpEvent) {
