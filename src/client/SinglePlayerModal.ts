@@ -47,7 +47,7 @@ export class SinglePlayerModal extends LitElement {
   @state() private gameMode: GameMode = GameMode.FFA;
   @state() private teamCount: TeamCountConfig = 2;
   @state() private economyMode: GameEconomyMode = GameEconomyMode.Classic;
-  @state() private aiSkirmish: boolean = false;
+  @state() private aiSkirmish: boolean = true;
 
   @state() private disabledUnits: UnitType[] = [];
 
