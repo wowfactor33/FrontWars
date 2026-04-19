@@ -553,7 +553,7 @@ export class SinglePlayerModal extends LitElement {
               playerTeams: this.teamCount,
               difficulty: this.selectedDifficulty,
               economyMode: this.economyMode,
-              disableNPCs: this.aiSkirmish ? true : this.disableNPCs,
+              disableNPCs: this.aiSkirmish ? false : this.disableNPCs,
               bots: botCount,
               infiniteGold: this.infiniteGold,
               donateGold: true,

@@ -1,5 +1,5 @@
 import { ClientID, GameID, Intent, Turn } from "../Schemas";
-import { Execution, Game } from "../game/Game";
+import { Execution, Game, Nation, PlayerID } from "../game/Game";
 import { AllianceExtensionExecution } from "./alliance/AllianceExtensionExecution";
 import { AllianceRequestExecution } from "./alliance/AllianceRequestExecution";
 import { AllianceRequestReplyExecution } from "./alliance/AllianceRequestReplyExecution";
@@ -26,7 +26,11 @@ import { TransportShipExecution } from "./TransportShipExecution";
 import { UpgradeStructureExecution } from "./UpgradeStructureExecution";
 import { CountrySpawner } from "./CountrySpawner";
 import { simpleHash } from "../Util";
-import { type CountryKey } from "../game/Geopolitics";
+import {
+  countryProfileFromName,
+  type CountryKey,
+} from "../game/Geopolitics";
+import { CountryExecution } from "./CountryExecution";
 
 export class Executor {
   // private random = new PseudoRandom(999)
@@ -140,9 +144,39 @@ export class Executor {
     );
   }
 
-  fakeHumanExecutions(): Execution[] {
+  realismCountryExecutions(
+    nations: Nation[],
+    excludeCountries: CountryKey[] = [],
+  ): Execution[] {
+    const excluded = new Set(excludeCountries);
+    return nations.flatMap((nation, index) => {
+      const profile = countryProfileFromName(nation.playerInfo.name);
+      if (profile === null || excluded.has(profile.key)) {
+        return [];
+      }
+
+      return [
+        new CountryExecution(
+          this.gameID,
+          nation.playerInfo,
+          this.mg.ref(nation.spawnCell.x, nation.spawnCell.y),
+          profile.key,
+          {
+            ...profile.personality,
+            jitter: profile.personality.jitter + index * 0.35,
+          },
+        ),
+      ];
+    });
+  }
+
+  fakeHumanExecutions(excludePlayerIDs: Iterable<PlayerID> = []): Execution[] {
+    const excluded = new Set(excludePlayerIDs);
     const execs: Execution[] = [];
     for (const nation of this.mg.nations()) {
+      if (excluded.has(nation.playerInfo.id)) {
+        continue;
+      }
       execs.push(new FakeHumanExecution(this.gameID, nation));
     }
     return execs;

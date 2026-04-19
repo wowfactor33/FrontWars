@@ -31,7 +31,11 @@ import { fixProfaneUsername } from "./validations/username";
 import { getConfig } from "./configuration/ConfigLoader";
 import { loadTerrainMap } from "./game/TerrainMapLoader";
 import { placeName } from "../client/graphics/NameBoxCalculator";
-import { countryKeyFromName, type CountryKey } from "./game/Geopolitics";
+import {
+  countryKeyFromName,
+  selectCountryProfiles,
+  type CountryKey,
+} from "./game/Geopolitics";
 
 export async function createGameRunner(
   gameStart: GameStartInfo,
@@ -104,12 +108,41 @@ export class GameRunner {
         .map((player) => countryKeyFromName(player.name()))
         .filter((country): country is CountryKey => country !== null);
 
-      if (this.game.config().bots() > 0) {
+      const selectedRealismCountries = selectCountryProfiles(
+        this.game.config().gameConfig().gameMap,
+        this.game.config().numBots(),
+        { exclude: reservedCountries },
+      );
+      const selectedRealismCountryKeys = new Set(
+        selectedRealismCountries.map((profile) => profile.key),
+      );
+      const realismNations = this.game.nations().filter((nation) => {
+        const country = countryKeyFromName(nation.playerInfo.name);
+        return country !== null && selectedRealismCountryKeys.has(country);
+      });
+      const realismControlledNationIDs = new Set(
+        realismNations.map((nation) => nation.playerInfo.id),
+      );
+
+      if (realismNations.length > 0) {
+        this.game.addExecution(
+          ...this.execManager.realismCountryExecutions(
+            realismNations,
+            reservedCountries,
+          ),
+        );
+      } else if (this.game.config().bots() > 0) {
         this.game.addExecution(
           ...this.execManager.spawnCountryExecutions(
             this.game.config().numBots(),
             reservedCountries,
           ),
+        );
+      }
+
+      if (this.game.config().spawnNPCs()) {
+        this.game.addExecution(
+          ...this.execManager.fakeHumanExecutions(realismControlledNationIDs),
         );
       }
     } else if (this.game.config().bots() > 0) {
