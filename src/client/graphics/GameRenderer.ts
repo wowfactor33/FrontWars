@@ -305,8 +305,8 @@ export class GameRenderer {
     window.addEventListener("resize", () => this.resizeCanvas());
     this.resizeCanvas();
 
-    //show whole map on startup
-    this.transformHandler.centerAll(0.9);
+    // Start closer during spawn phase so picking an opening territory is easier.
+    this.transformHandler.centerAll(this.game.inSpawnPhase() ? 1.35 : 0.9);
 
     let rafId = requestAnimationFrame(() => this.renderGame());
     this.canvas.addEventListener("contextlost", () => {

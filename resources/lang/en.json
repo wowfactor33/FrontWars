@@ -672,7 +672,7 @@
     "desync_notice": "You are desynced from other players. What you see might differ from other players."
   },
   "heads_up_message": {
-    "choose_spawn": "Choose a starting location"
+    "choose_spawn": "Click any green land tile to choose your starting location. Drag to move the map. Scroll or use Q / E to zoom."
   },
   "territory_patterns": {
     "title": "Skins",
