@@ -1,5 +1,7 @@
 const PATTERN_KEY = "territoryPattern";
 const TERRITORY_COLOR_KEY = "settings.territoryColor";
+const BACKGROUND_MUSIC_VOLUME_KEY = "settings.backgroundMusicVolume";
+const SOUND_EFFECTS_VOLUME_KEY = "settings.soundEffectsVolume";
 
 export class UserSettings {
   get(key: string, defaultValue: boolean): boolean {
@@ -15,6 +17,25 @@ export class UserSettings {
 
   set(key: string, value: boolean) {
     localStorage.setItem(key, value ? "true" : "false");
+  }
+
+  private getNumber(key: string, defaultValue: number): number {
+    const raw = localStorage.getItem(key);
+    if (raw === null) {
+      return defaultValue;
+    }
+
+    const parsed = Number.parseFloat(raw);
+    if (!Number.isFinite(parsed)) {
+      return defaultValue;
+    }
+
+    return parsed;
+  }
+
+  private setNumber(key: string, value: number): void {
+    const clamped = Math.max(0, Math.min(1, value));
+    localStorage.setItem(key, String(clamped));
   }
 
   emojis() {
@@ -47,6 +68,22 @@ export class UserSettings {
 
   darkMode() {
     return this.get("settings.darkMode", false);
+  }
+
+  backgroundMusicVolume(): number {
+    return this.getNumber(BACKGROUND_MUSIC_VOLUME_KEY, 0.5);
+  }
+
+  setBackgroundMusicVolume(volume: number): void {
+    this.setNumber(BACKGROUND_MUSIC_VOLUME_KEY, volume);
+  }
+
+  soundEffectsVolume(): number {
+    return this.getNumber(SOUND_EFFECTS_VOLUME_KEY, 0.5);
+  }
+
+  setSoundEffectsVolume(volume: number): void {
+    this.setNumber(SOUND_EFFECTS_VOLUME_KEY, volume);
   }
 
   leftClickOpensMenu() {
