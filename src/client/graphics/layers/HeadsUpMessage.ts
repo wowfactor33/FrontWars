@@ -37,7 +37,7 @@ export class HeadsUpMessage extends LitElement implements Layer {
         class="flex items-center relative
                     w-full justify-center min-h-[3rem] md:min-h-[4rem] md:top-[70px] left-0 lg:left-4 
                     bg-opacity-80 bg-gray-900 rounded-md lg:rounded-lg 
-                    backdrop-blur-md text-white text-sm md:text-base lg:text-lg p-2 lg:p-3 text-center"
+                    backdrop-blur-md text-white text-sm md:text-base lg:text-lg p-2 lg:p-3 text-center pointer-events-none select-none"
         @contextmenu=${(e: MouseEvent) => e.preventDefault()}
       >
         ${translateText("heads_up_message.choose_spawn")}

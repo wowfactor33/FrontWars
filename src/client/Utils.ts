@@ -52,6 +52,8 @@ export function createCanvas(): HTMLCanvasElement {
   canvas.style.width = "100%";
   canvas.style.height = "100%";
   canvas.style.touchAction = "none";
+  canvas.style.pointerEvents = "auto";
+  canvas.style.zIndex = "1";
 
   return canvas;
 }

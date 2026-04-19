@@ -120,6 +120,35 @@ export class AutoUpgradeEvent implements GameEvent {
 }
 
 export class InputHandler {
+  private static readonly VIEWPORT_UI_SELECTOR = [
+    "button",
+    "input",
+    "textarea",
+    "select",
+    "option",
+    "label",
+    "a",
+    "[role='button']",
+    "[contenteditable='true']",
+    "control-panel",
+    "options-menu",
+    "build-menu",
+    "player-panel",
+    "player-info-overlay",
+    "chat-display",
+    "events-display",
+    "settings-modal",
+    "chat-modal",
+    "emoji-table",
+    "leader-board",
+    "replay-panel",
+    "multi-tab-modal",
+    "win-modal",
+    "o-modal",
+    "#radialMenu",
+    ".radial-menu",
+  ].join(", ");
+
   private lastPointerX: number = 0;
   private lastPointerY: number = 0;
 
@@ -212,11 +241,19 @@ export class InputHandler {
       this.keybinds.modifierKey = "MetaLeft"; // Use Command key on Mac
     }
 
-    this.canvas.addEventListener("pointerdown", (e) => this.onPointerDown(e));
+    window.addEventListener("pointerdown", (e) => {
+      if (!this.shouldHandleViewportInput(e)) {
+        return;
+      }
+      this.onPointerDown(e);
+    });
     window.addEventListener("pointerup", (e) => this.onPointerUp(e));
-    this.canvas.addEventListener(
+    window.addEventListener(
       "wheel",
       (e) => {
+        if (!this.shouldHandleViewportInput(e)) {
+          return;
+        }
         this.onScroll(e);
         this.onShiftScroll(e);
         e.preventDefault();
@@ -224,7 +261,12 @@ export class InputHandler {
       { passive: false },
     );
     window.addEventListener("pointermove", this.onPointerMove.bind(this));
-    this.canvas.addEventListener("contextmenu", (e) => this.onContextMenu(e));
+    window.addEventListener("contextmenu", (e) => {
+      if (!this.shouldHandleViewportInput(e)) {
+        return;
+      }
+      this.onContextMenu(e);
+    });
     window.addEventListener("mousemove", (e) => {
       if (e.movementX || e.movementY) {
         this.eventBus.emit(new MouseMoveEvent(e.clientX, e.clientY));
@@ -652,5 +694,24 @@ export class InputHandler {
       (this.keybinds.altKey === "ShiftLeft" && event.shiftKey) ||
       (this.keybinds.altKey === "MetaLeft" && event.metaKey)
     );
+  }
+
+  private shouldHandleViewportInput(event: Event): boolean {
+    const path = event.composedPath();
+    for (const node of path) {
+      if (!(node instanceof Element)) {
+        continue;
+      }
+
+      if (node === this.canvas) {
+        return true;
+      }
+
+      if (node.closest(InputHandler.VIEWPORT_UI_SELECTOR)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
